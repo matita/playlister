@@ -35,12 +35,17 @@ module.exports = React.createClass({
       me.askNextTrack()
   },
 
+  handleArtistRemove: function(artist) {
+    this.state.playlist.removeArtist(artist)
+    this.setState({ playlist: this.state.playlist })
+  },
+
   togglePlay: function () {
     this.setState({ playing: !this.state.playing })
   },
 
   setVolume: function (val) {
-    this.setState({ volume: val })
+    this.setState({ volume: +val })
   },
 
   render: function () {
@@ -62,7 +67,7 @@ module.exports = React.createClass({
           onEnded={this.askNextTrack}
           onTogglePlayClick={this.togglePlay}
           onVolumeChange={this.setVolume} />
-        <ArtistsList artists={this.state.playlist.artists} />
+        <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
         <SearchArtists onArtistClicked={this.handleArtistClicked}/>
         <h2>Tracks</h2>
         <ul>

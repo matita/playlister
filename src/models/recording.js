@@ -8,7 +8,7 @@ module.exports = function (props) {
       return setTimeout(function () { callback(props.sources) })
 
     var searchText = props.artistName + ' ' + props.title
-    search(searchText, { maxResults: 5, key: YT_KEY }, function (err, results) {
+    search(searchText, { maxResults: 5, type: 'video', key: YT_KEY }, function (err, results) {
       if (err)
         return callback(err)
 
