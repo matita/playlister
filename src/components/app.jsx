@@ -4,6 +4,8 @@ var SearchArtists = require('./search-artists.jsx')
 var ArtistsList = require('./artists-list.jsx')
 var Player = require('./player.jsx')
 
+var SITE_NAME = 'Playlister'
+
 module.exports = React.createClass({
   getInitialState: function () {
     return {
@@ -12,7 +14,17 @@ module.exports = React.createClass({
       currentTrack: null,
       url: null,
       playing: true,
-      volume: 0.8
+      volume: 0.2
+    }
+  },
+
+  componentDidUpdate: function (prevProps, prevState) {
+    var currentTrack = this.state.currentTrack
+    if (prevState.currentTrack != currentTrack) {
+      if (currentTrack)
+        document.title = currentTrack.artistName + ' - ' + currentTrack.title + ' | ' + SITE_NAME
+      else
+        document.title = SITE_NAME
     }
   },
 
@@ -59,20 +71,25 @@ module.exports = React.createClass({
 
     return (
       <div className="app">
-        <h1>P</h1>
-        <Player 
-          track={this.state.currentTrack} 
-          playing={this.state.playing}
-          volume={this.state.volume}
-          onEnded={this.askNextTrack}
-          onTogglePlayClick={this.togglePlay}
-          onVolumeChange={this.setVolume} />
-        <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
-        <SearchArtists onArtistClicked={this.handleArtistClicked}/>
-        <h2>Tracks</h2>
-        <ul>
-          {tracks}
-        </ul>
+        <div className="player-container">
+          <Player 
+            track={this.state.currentTrack} 
+            playing={this.state.playing}
+            volume={this.state.volume}
+            onEnded={this.askNextTrack}
+            onTogglePlayClick={this.togglePlay}
+            onVolumeChange={this.setVolume} />
+        </div>
+        <div className="playlist-container">
+          <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
+          <SearchArtists onArtistClicked={this.handleArtistClicked}/>
+          <div className="tracks">
+            <h2>Tracks</h2>
+            <ul>
+              {tracks}
+            </ul>
+          </div>
+        </div>
       </div>
     )
   }

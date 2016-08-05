@@ -66,6 +66,7 @@ module.exports = React.createClass({
     return (<div className="player">
       <ReactPlayer 
         ref='player'
+        className="player-div"
         url={this.state.url} 
         playing={this.props.playing} 
         volume={this.props.volume}

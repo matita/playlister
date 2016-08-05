@@ -13,12 +13,13 @@ module.exports = React.createClass({
     var artists = this.props.artists.length ? this.props.artists.map(function (artist, i) {
       return (<div className="artists-list-item" key={i}>
         {artist.name}
-        <button className="artist-list-remove" onClick={me.removeArtist(artist)}>Remove</button>
+        <button className="artists-list-remove" onClick={me.removeArtist(artist)}>&times;</button>
       </div>)
-    }) : 'No artist selected'
+    }) : ''
 
     return (<div className="artists-list">
-      Playlist with: {artists}
+      <h2>Artists</h2>
+      {artists}
     </div>)
   }
 })
