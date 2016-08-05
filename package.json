@@ -23,6 +23,7 @@
     "musicbrainz": "^0.2.6",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
+    "react-hotkeys": "^0.9.0",
     "react-player": "^0.8.0",
     "shuffle-array": "^1.0.0",
     "youtube-search": "^1.0.6"

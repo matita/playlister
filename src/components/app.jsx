@@ -3,8 +3,16 @@ var React = require('react')
 var SearchArtists = require('./search-artists.jsx')
 var ArtistsList = require('./artists-list.jsx')
 var Player = require('./player.jsx')
+var HotKeys = require('react-hotkeys').HotKeys
 
 var SITE_NAME = 'Playlister'
+
+var keysMap = {
+  'togglePlay': 'space',
+  'nextTrack': 'right',
+  'volumeUp': 'up',
+  'volumeDown': 'down'
+}
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -78,10 +86,25 @@ module.exports = React.createClass({
   },
 
   setVolume: function (val) {
-    this.setState({ volume: +val })
+    this.setState({ volume: Math.max(0, Math.min(+val, 1)) })
+  },
+
+  volumeUp: function () {
+    this.setVolume(this.state.volume + 0.05)
+  },
+
+  volumeDown: function () {
+    this.setVolume(this.state.volume - 0.05)
   },
 
   render: function () {
+    var keysHandlers = {
+      'togglePlay': this.togglePlay,
+      'nextTrack': this.askNextTrack,
+      'volumeUp': this.volumeUp,
+      'volumeDown': this.volumeDown
+    }
+
     var tracks = this.state.tracks.map(function (track, i) {
       var sources = track.sources ? track.sources.map(function (source, j) {
         return <li key={j}><a href={source.link} target="_blank">{source.title}</a></li>
@@ -91,27 +114,29 @@ module.exports = React.createClass({
     })
 
     return (
-      <div className="app">
-        <div className="player-container">
-          <Player 
-            track={this.state.currentTrack} 
-            playing={this.state.playing}
-            volume={this.state.volume}
-            onEnded={this.askNextTrack}
-            onTogglePlayClick={this.togglePlay}
-            onVolumeChange={this.setVolume} />
-        </div>
-        <div className="playlist-container">
-          <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
-          <SearchArtists onArtistClicked={this.handleArtistClicked}/>
-          <div className="tracks">
-            <h2>Tracks</h2>
-            <ul>
-              {tracks}
-            </ul>
+      <HotKeys keyMap={keysMap} handlers={keysHandlers}>
+        <div className="app">
+          <div className="player-container">
+            <Player 
+              track={this.state.currentTrack} 
+              playing={this.state.playing}
+              volume={this.state.volume}
+              onEnded={this.askNextTrack}
+              onTogglePlayClick={this.togglePlay}
+              onVolumeChange={this.setVolume} />
+          </div>
+          <div className="playlist-container">
+            <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
+            <SearchArtists onArtistClicked={this.handleArtistClicked}/>
+            <div className="tracks">
+              <h2>Tracks</h2>
+              <ul>
+                {tracks}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      </HotKeys>
     )
   }
 })
