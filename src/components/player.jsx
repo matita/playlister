@@ -62,7 +62,7 @@ module.exports = React.createClass({
 
   render: function () {
     var track = this.props.track || {}
-    
+
     return (<div className="player">
       <ReactPlayer 
         ref='player'
@@ -79,7 +79,7 @@ module.exports = React.createClass({
       </div>
       <div className="player-controls">
         <button className="player-controls-play" onClick={this.props.onTogglePlayClick}>{this.props.playing ? 'Pause' : 'Play'}</button>
-        <button className="player-controls-next" onClick={this.props.onEnded}>Next</button>
+        <button className="player-controls-next" disabled={this.props.askingNext} onClick={this.props.onEnded}>{this.props.askingNext ? 'Loading' : 'Next'}</button>
         <span className="player-controls-current-time">{this.getCurrentTime()}</span>
         <input type="range" min={0} max={1} step="any" value={this.state.played} onInput={this.handleSeekChange} onChange={this.endSeekChange} />
         <span className="player-controls-duration">{this.getDuration()}</span>

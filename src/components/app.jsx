@@ -30,8 +30,8 @@ module.exports = React.createClass({
       playlist: playlist,
       tracks: [],
       currentTrack: null,
-      url: null,
       playing: true,
+      askingNext: false,
       volume: 0.2
     }
   },
@@ -59,10 +59,12 @@ module.exports = React.createClass({
 
   askNextTrack: function () {
     var me = this
+    me.setState({ askingNext: true })
     me.state.playlist.getNextTrack(function (track) {
       me.setState({ 
         tracks: me.state.tracks.concat(track),
-        currentTrack: track
+        currentTrack: track,
+        askingNext: false
       })
     })
   },
@@ -121,6 +123,7 @@ module.exports = React.createClass({
               track={this.state.currentTrack} 
               playing={this.state.playing}
               volume={this.state.volume}
+              askingNext={this.state.askingNext}
               onEnded={this.askNextTrack}
               onTogglePlayClick={this.togglePlay}
               onVolumeChange={this.setVolume} />
