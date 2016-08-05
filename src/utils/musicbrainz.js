@@ -5,6 +5,11 @@ var asyncThrottle = require('./async-throttle')(1000)
 var baseUrl = ' http://musicbrainz.org/ws/2/'
 
 function api (endpoint, params, callback) {
+  if (typeof params == 'function') {
+    callback = params
+    params = {}
+  }
+  params = params || {}
   params.fmt = 'json'
   var url = baseUrl + endpoint + '?' + encodeParams(params)
   //asyncThrottle.enqueue(function () {
@@ -20,8 +25,17 @@ function api (endpoint, params, callback) {
 }
 
 module.exports = {
-  searchArtists: function (query, callback) {
-    api('artist', { query: query, limit: 5 }, callback)
+  getArtist: function(artistId, callback) {
+    api('artist/' + encodeURIComponent(artistId), callback)
+  },
+
+  searchArtists: function (query, params, callback) {
+    if (typeof params === 'function') {
+      callback = params
+      params = { limit: 5 }
+    }
+    params.query = query
+    api('artist', params, callback)
   },
 
   searchRecordings: function (query, params, callback) {

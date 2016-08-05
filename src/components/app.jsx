@@ -8,8 +8,18 @@ var SITE_NAME = 'Playlister'
 
 module.exports = React.createClass({
   getInitialState: function () {
+    var me = this
+    var playlist = require('../models/playlist')
+    var artistIds = window.location.hash.replace('#/', '').split('+')
+    if (artistIds.length) {
+      playlist.addArtist(artistIds, function () {
+        me.setState({ playlist: playlist })
+        me.askNextTrack()
+      })
+    }
+
     return {
-      playlist: require('../models/playlist'),
+      playlist: playlist,
       tracks: [],
       currentTrack: null,
       url: null,
@@ -19,13 +29,24 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function (prevProps, prevState) {
+    if (prevState.currentTrack != this.state.currentTrack)
+      this.updateDocumentTitle()
+    this.updateLocation()
+  },
+
+  updateDocumentTitle: function () {
     var currentTrack = this.state.currentTrack
-    if (prevState.currentTrack != currentTrack) {
-      if (currentTrack)
-        document.title = currentTrack.artistName + ' - ' + currentTrack.title + ' | ' + SITE_NAME
-      else
-        document.title = SITE_NAME
-    }
+    if (currentTrack)
+      document.title = currentTrack.artistName + ' - ' + currentTrack.title + ' | ' + SITE_NAME
+    else
+      document.title = SITE_NAME
+  },
+
+  updateLocation: function () {
+    var artistsIds = this.state.playlist.artists.map(function (artist) {
+      return artist.id
+    }).join('+')
+    window.location.hash = '/' + artistsIds
   },
 
   askNextTrack: function () {
