@@ -79,6 +79,10 @@ div:focus {
 .search-artists input::input-placeholder {
   color: #bbb;
 }
+.search-artists-item.selected {
+  background-color: #999;
+  color: #eee;
+}
 .tracks {
   display: none;
 }
