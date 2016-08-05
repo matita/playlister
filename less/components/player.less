@@ -21,4 +21,30 @@
 
 .player-controls {
   padding: 1em;
+  display: flex;
+}
+
+.player-controls button {
+  font-size: 1.3em;
+  color: #555;
+  margin-right: .5em;
+  width: 30px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: center;
+}
+
+.player-controls-seekbar {
+  flex: 4;
+}
+
+.player-controls-volumebar {
+  flex: 1;
+}
+
+.player-controls-current-time,
+.player-controls-duration {
+  padding-left: .5em;
+  padding-right: .5em;
 }

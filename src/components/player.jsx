@@ -78,12 +78,17 @@ module.exports = React.createClass({
         <div className="player-track-artist">{track.artistName || '---'}</div>
       </div>
       <div className="player-controls">
-        <button className="player-controls-play" onClick={this.props.onTogglePlayClick}>{this.props.playing ? 'Pause' : 'Play'}</button>
-        <button className="player-controls-next" disabled={this.props.askingNext} onClick={this.props.onEnded}>{this.props.askingNext ? 'Loading' : 'Next'}</button>
+        <button className="player-controls-play" onClick={this.props.onTogglePlayClick}>
+          <i className={'fa fa-' + (this.props.playing ? 'pause' : 'play')}></i>
+        </button>
+        <button className="player-controls-next" disabled={this.props.askingNext} onClick={this.props.onEnded}>
+          <i className={'fa fa-' + (this.props.askingNext ? 'spinner fa-spin' : 'step-forward')}></i>
+        </button>
         <span className="player-controls-current-time">{this.getCurrentTime()}</span>
-        <input type="range" min={0} max={1} step="any" value={this.state.played} onInput={this.handleSeekChange} onChange={this.endSeekChange} />
+        <input type="range" className="player-controls-seekbar" min={0} max={1} step="any" value={this.state.played} onInput={this.handleSeekChange} onChange={this.endSeekChange} />
         <span className="player-controls-duration">{this.getDuration()}</span>
-        <input type="range" min={0} max={1} step="any" value={this.props.volume} onInput={this.handleVolumeChange} onChange={this.handleVolumeChange} />
+        <button className="player-controls-volume-btn"><i className="fa fa-volume-down"></i></button>
+        <input type="range" className="player-controls-volumebar" min={0} max={1} step="any" value={this.props.volume} onInput={this.handleVolumeChange} onChange={this.handleVolumeChange} />
       </div>
     </div>)
   }

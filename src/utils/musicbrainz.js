@@ -17,7 +17,7 @@ function api (endpoint, params, callback) {
     request({ uri: url, json: true }, function (err, response, body) {
       //done()
       if (err)
-        return api(endpoint, params, callback)
+        return setTimeout(function () { api(endpoint, params, callback) }, 500)
 
       callback(err, body)
     })
