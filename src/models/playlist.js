@@ -2,7 +2,6 @@ var mb = require('../utils/musicbrainz')
 var Artist = require('./artist')
 
 var artists = []
-var artistsToQuery = []
 
 var me = module.exports = {
   artists: artists,
@@ -45,8 +44,4 @@ var me = module.exports = {
     artist.getNextTrack(callback)
     return me
   }
-}
-
-function dequeueArtistsToSearch () {
-
 }
