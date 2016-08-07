@@ -2,7 +2,7 @@ var request = require('browser-request')
 var encodeParams = require('./encode-params')
 var asyncThrottle = require('./async-throttle')(1000)
 
-var baseUrl = ' http://musicbrainz.org/ws/2/'
+var baseUrl = '//musicbrainz.org/ws/2/'
 
 function api (endpoint, params, callback) {
   if (typeof params == 'function') {
