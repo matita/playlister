@@ -11,7 +11,8 @@
     "watch:js": "watch \"npm run build:js\" src",
     "livereload": "live-reload --port 3001 public/",
     "serve": "http-server -p 4001",
-    "dev": "parallelshell \"npm run serve\" \"npm run livereload\" \"npm run watch:js\" \"npm run watch:css\""
+    "dev": "parallelshell \"npm run serve\" \"npm run livereload\" \"npm run watch:js\" \"npm run watch:css\"",
+    "push-page": "git subtree push --prefix public origin gh-pages"
   },
   "repository": {},
   "author": "Matita",
