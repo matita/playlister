@@ -32,7 +32,8 @@ module.exports = React.createClass({
       currentTrack: null,
       playing: true,
       askingNext: false,
-      volume: 0.2
+      volume: 0.2,
+      searchIsFocused: !artistIds.length
     }
   },
 
@@ -138,7 +139,7 @@ module.exports = React.createClass({
           </div>
           <div className="playlist-container">
             <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
-            <SearchArtists onArtistClicked={this.handleArtistClicked}/>
+            <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused}/>
             <div className="tracks">
               <h2>Tracks</h2>
               <ul>

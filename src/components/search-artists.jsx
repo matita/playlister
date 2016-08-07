@@ -14,6 +14,22 @@ module.exports = React.createClass({
     }
   },
 
+  componentDidMount: function () {
+    this.focusIfNeeded()
+  },
+
+  componentDidUpdate: function (prevProps, prevState) {
+    if (prevProps.focused != this.props.focused)
+      this.focusIfNeeded()
+  },
+
+  focusIfNeeded: function () {
+    if (this.props.focused)
+      this.refs.input.focus()
+    else
+      this.refs.input.blur()
+  },
+
   search: function () {
     var me = this
 
@@ -122,7 +138,7 @@ module.exports = React.createClass({
       <HotKeys handlers={keysHandlers}>
         <div className="search-artists">
           <div className="search-artists-container">
-            <input type="search" placeholder="Add artist" value={this.state.searchText} onInput={this.handleInput} onKeyPress={this.handleKeyPress} />
+            <input ref="input" type="search" placeholder="Add artist" value={this.state.searchText} onInput={this.handleInput} onKeyPress={this.handleKeyPress} />
           </div>
           <ul className="search-artists-results">
             {results}
