@@ -13,6 +13,7 @@
     "livereload": "live-reload --port 3001 public/",
     "serve": "http-server -p 4001",
     "dev": "parallelshell \"npm run serve\" \"npm run livereload\" \"npm run watch:js\" \"npm run watch:css\"",
+    "prepush-page": "npm run build:js:dist & git add * & git commit -m \"release at $(date)\"",
     "push-page": "git subtree push --prefix public origin gh-pages"
   },
   "repository": {},
