@@ -80,7 +80,15 @@ module.exports = React.createClass({
 
   handleArtistRemove: function(artist) {
     this.state.playlist.removeArtist(artist)
-    this.setState({ playlist: this.state.playlist })
+    var nextState = {
+      playlist: this.state.playlist
+    }
+    if (this.state.currentTrack && this.state.currentTrack.artistName === artist.name) {
+      nextState.currentTrack = null
+      if (this.state.playlist.artists.length)
+        this.askNextTrack()
+    }
+    this.setState(nextState)
   },
 
   togglePlay: function () {
