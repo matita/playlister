@@ -16,7 +16,7 @@ function api (endpoint, params, callback) {
     //var done = asyncThrottle.async()
     request({ uri: url, json: true }, function (err, response, body) {
       //done()
-      if (err)
+      if (err || body && body.error)
         return setTimeout(function () { api(endpoint, params, callback) }, 500)
 
       callback(err, body)

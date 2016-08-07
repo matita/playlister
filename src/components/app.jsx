@@ -18,7 +18,7 @@ module.exports = React.createClass({
   getInitialState: function () {
     var me = this
     var playlist = require('../models/playlist')
-    var artistIds = window.location.hash.replace('#/', '').split('+')
+    var artistIds = window.location.hash.replace('#/', '').split('+').filter(function (id) { return !!id })
     if (artistIds.length) {
       playlist.addArtist(artistIds, function () {
         me.setState({ playlist: playlist })
