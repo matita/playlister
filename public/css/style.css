@@ -1,48 +1,71 @@
+* {
+  box-sizing: border-box;
+}
 html,
 body {
   margin: 0;
   padding: 0;
 }
 body {
-  background: #eee;
   font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  color: #555;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 100;
 }
 div:focus {
   outline: none;
 }
 .app {
-  display: flex;
-  height: 100vh;
+  max-width: 500px;
+  margin: 0 auto;
 }
 .player-container {
-  flex: 1;
+  margin-top: 0;
+  transition: 0.5s margin-top, 0.5s opacity;
+  opacity: 1;
+}
+.player-container.hidden {
+  margin-top: -20vh;
+  opacity: 0;
 }
 .playlist-container {
-  flex: 1;
-  overflow: auto;
-  padding: 1em;
-  color: #999;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 .player {
   background: #fff;
   text-align: center;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-  width: 640px;
-  margin: 1em auto;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+}
+.player-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
 }
 .player-div {
+  position: absolute;
+  top: 0;
+  left: 0;
   background: #000;
 }
 .player-track {
-  padding: 1em;
+  padding: .5em 0;
 }
 .player-track-title {
   font-size: 1.7em;
   margin-bottom: .5em;
 }
 .player-controls {
-  padding: 1em;
   display: flex;
 }
 .player-controls button {
@@ -57,9 +80,12 @@ div:focus {
 }
 .player-controls-seekbar {
   flex: 4;
+  min-width: 10px;
 }
 .player-controls-volumebar {
   flex: 1;
+  max-width: 60px;
+  min-width: 10px;
 }
 .player-controls-current-time,
 .player-controls-duration {
@@ -86,35 +112,40 @@ div:focus {
 .artists-list-item:hover .artists-list-remove {
   display: inline-block;
 }
+.search-artists {
+  margin-bottom: 1em;
+}
 .search-artists input {
-  border: none;
-  background: none;
   font-family: 'Lato', sans-serif;
   font-size: 1.5em;
-  cursor: pointer;
   outline: unset;
-  color: #999;
-}
-.search-artists input:focus {
-  border-bottom: 2px solid;
+  border: 1px solid #999;
+  width: 100%;
+  padding: .3em;
+  border-radius: 5px;
 }
 .search-artists input::input-placeholder {
   color: #bbb;
 }
-.search-artists-container {
-  margin-bottom: 1em;
+.search-artists-prompt {
+  text-align: center;
 }
 .search-artists-item:hover,
 .search-artists-item.selected {
-  background-color: #999;
+  background-color: #555;
   color: #eee;
+}
+.search-artists-item-disambiguation {
+  margin-left: .5em;
+  color: #999;
 }
 .tracks {
   display: none;
 }
 .search-artists-results {
   padding: 0;
-  margin: 0;
+  margin: 0 1em;
+  border: 1px solid #999;
   list-style-type: none;
 }
 .search-artists-item {

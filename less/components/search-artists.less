@@ -1,17 +1,15 @@
 .search-artists {
+  margin-bottom: 1em;
+
   input {
-    border: none;
-    background: none;
     font-family: 'Lato', sans-serif;
     font-size: 1.5em;
-    cursor: pointer;
     outline: unset;
-    color: @soft-text-color;
-
-    &:focus {
-      border-bottom: 2px solid;
-    }
-
+    border: 1px solid #999;
+    width: 100%;
+    padding: .3em;
+    border-radius: 5px;
+    
     &::input-placeholder {
       color: #bbb;
     }
@@ -19,13 +17,23 @@
 }
 
 .search-artists-container {
-  margin-bottom: 1em;
+  
+}
+
+.search-artists-prompt {
+  text-align: center;
 }
 
 .search-artists-item:hover,
 .search-artists-item.selected {
-  background-color: @soft-text-color;
+  background-color: @text-color;
   color: @bg-color;
+}
+
+
+.search-artists-item-disambiguation {
+  margin-left: .5em;
+  color: @soft-text-color;
 }
 
 .tracks {
@@ -34,7 +42,8 @@
 
 .search-artists-results {
   padding: 0;
-  margin: 0;
+  margin: 0 1em;
+  border: 1px solid #999;
   list-style-type: none;
 }
 

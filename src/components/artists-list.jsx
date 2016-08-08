@@ -18,7 +18,6 @@ module.exports = React.createClass({
     }) : ''
 
     return (<div className="artists-list">
-      <h2>Artists</h2>
       {artists}
     </div>)
   }

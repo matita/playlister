@@ -127,7 +127,7 @@ module.exports = React.createClass({
     return (
       <HotKeys keyMap={keysMap} handlers={keysHandlers}>
         <div className="app">
-          <div className="player-container">
+          <div className={'player-container' + (this.state.playlist.artists.length ? '' : ' hidden')}>
             <Player 
               track={this.state.currentTrack} 
               playing={this.state.playing}
@@ -137,9 +137,9 @@ module.exports = React.createClass({
               onTogglePlayClick={this.togglePlay}
               onVolumeChange={this.setVolume} />
           </div>
-          <div className="playlist-container">
-            <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
+          <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
             <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused}/>
+            <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
             <div className="tracks">
               <h2>Tracks</h2>
               <ul>

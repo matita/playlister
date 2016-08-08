@@ -1,15 +1,20 @@
 .app {
-  display: flex;
-  height: 100vh;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .player-container {
-  flex: 1;
+  margin-top: 0;
+  transition: .5s margin-top, .5s opacity;
+  opacity: 1;
+
+  &.hidden {
+    margin-top: -20vh;
+    opacity: 0;
+  }
 }
 
 .playlist-container {
-  flex: 1;
-  overflow: auto;
-  padding: 1em;
-  color: @soft-text-color;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }

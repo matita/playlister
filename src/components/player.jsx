@@ -64,15 +64,19 @@ module.exports = React.createClass({
     var track = this.props.track || {}
 
     return (<div className="player">
-      <ReactPlayer 
-        ref='player'
-        className="player-div"
-        url={this.state.url} 
-        playing={this.props.playing} 
-        volume={this.props.volume}
-        onEnded={this.props.onEnded}
-        onProgress={this.handleProgressChange}
-        onDuration={this.handleDuration} />
+      <div className="player-wrapper">
+        <ReactPlayer 
+          ref='player'
+          className="player-div"
+          width='100%'
+          height='100%'
+          url={this.state.url} 
+          playing={this.props.playing} 
+          volume={this.props.volume}
+          onEnded={this.props.onEnded}
+          onProgress={this.handleProgressChange}
+          onDuration={this.handleDuration} />
+      </div>
       <div className="player-track">
         <div className="player-track-title">{track.title || '---'}</div>
         <div className="player-track-artist">{track.artistName || '---'}</div>
