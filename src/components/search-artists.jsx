@@ -152,7 +152,7 @@ module.exports = React.createClass({
         </li>)
     })
 
-    var resultsWrapper = (this.state.hasFocus && this.state.searchText && this.state.results.length ? <ul className="search-artists-results">
+    var resultsWrapper = ((this.state.hasFocus && this.state.searchText && this.state.results.length) || this.state.searching ? <ul className="search-artists-results">
       {results}
     </ul> : '')
 

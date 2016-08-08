@@ -6,7 +6,7 @@ module.exports = function (props) {
   props.currentIndex = 0
 
   props.findAllTracks = function (callback) {
-    mb.searchRecordings('arid:' + props.id, { limit: 1 }, function(err, result) {
+    mb.searchRecordings('arid:' + props.id + ' AND type:album', { limit: 1 }, function(err, result) {
       if (err)
         return setTimeout(function () { props.findAllTracks(callback) }, 1000)
 
