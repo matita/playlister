@@ -92,6 +92,13 @@ div:focus {
   padding-left: .5em;
   padding-right: .5em;
 }
+.next-track {
+  text-decoration: none;
+  color: #999;
+}
+.next-track:hover {
+  border-bottom: 1px solid;
+}
 .artists-list h2 {
   margin-top: 0;
 }
