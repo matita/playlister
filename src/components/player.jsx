@@ -72,7 +72,7 @@ module.exports = React.createClass({
           height='100%'
           url={this.state.url} 
           playing={this.props.playing} 
-          volume={this.props.volume}
+          volume={this.props.muted ? 0 : this.props.volume}
           onEnded={this.props.onEnded}
           onProgress={this.handleProgressChange}
           onDuration={this.handleDuration} />
@@ -91,7 +91,7 @@ module.exports = React.createClass({
         <span className="player-controls-current-time">{this.getCurrentTime()}</span>
         <input type="range" className="player-controls-seekbar" min={0} max={1} step="any" value={this.state.played} onInput={this.handleSeekChange} onChange={this.endSeekChange} />
         <span className="player-controls-duration">{this.getDuration()}</span>
-        <button className="player-controls-volume-btn"><i className="fa fa-volume-down"></i></button>
+        <button className="player-controls-volume-btn" onClick={this.props.onToggleMuteClick}><i className={'fa fa-volume-' + (this.props.muted ? 'off' : 'down')}></i></button>
         <input type="range" className="player-controls-volumebar" min={0} max={1} step="any" value={this.props.volume} onInput={this.handleVolumeChange} onChange={this.handleVolumeChange} />
       </div>
     </div>)

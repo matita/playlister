@@ -33,6 +33,7 @@ module.exports = React.createClass({
       playing: true,
       askingNext: false,
       volume: 0.2,
+      muted: false,
       searchIsFocused: !artistIds.length
     }
   },
@@ -96,8 +97,15 @@ module.exports = React.createClass({
     this.setState({ playing: !this.state.playing })
   },
 
+  toggleMute: function () {
+    this.setState({ muted: !this.state.muted })
+  },
+
   setVolume: function (val) {
-    this.setState({ volume: Math.max(0, Math.min(+val, 1)) })
+    this.setState({ 
+      volume: Math.max(0, Math.min(+val, 1)),
+      muted: false
+    })
   },
 
   volumeUp: function () {
@@ -132,9 +140,11 @@ module.exports = React.createClass({
               track={this.state.currentTrack} 
               playing={this.state.playing}
               volume={this.state.volume}
+              muted={this.state.muted}
               askingNext={this.state.askingNext}
               onEnded={this.askNextTrack}
               onTogglePlayClick={this.togglePlay}
+              onToggleMuteClick={this.toggleMute}
               onVolumeChange={this.setVolume} />
           </div>
           <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
