@@ -156,10 +156,12 @@ module.exports = React.createClass({
       {results}
     </ul> : '')
 
+    var prompt = this.props.noArtistYet ? 'Which artist do you want to listen to?' : 'Another artist?'
+
     return (
       <HotKeys handlers={keysHandlers}>
         <div className="search-artists">
-          <h2 className="search-artists-prompt">Which artist do you want to listen to?</h2>
+          <h2 className="search-artists-prompt">{prompt}</h2>
           <div className="search-artists-container">
             <input 
               ref="input" 

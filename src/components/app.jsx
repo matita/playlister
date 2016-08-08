@@ -138,7 +138,7 @@ module.exports = React.createClass({
               onVolumeChange={this.setVolume} />
           </div>
           <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
-            <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused}/>
+            <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused} noArtistYet={this.state.playlist.artists.length == 0} />
             <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
             <div className="tracks">
               <h2>Tracks</h2>
