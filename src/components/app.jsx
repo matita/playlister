@@ -26,10 +26,15 @@ module.exports = React.createClass({
       })
     }
 
+    playlist.onNextFound = function (track) {
+      me.setState({ nextTrack: track })
+    }
+
     return {
       playlist: playlist,
       tracks: [],
       currentTrack: null,
+      nextTrack: null,
       playing: true,
       askingNext: false,
       volume: 0.2,
@@ -66,6 +71,7 @@ module.exports = React.createClass({
       me.setState({ 
         tracks: me.state.tracks.concat(track),
         currentTrack: track,
+        nextTrack: me.state.playlist.nextTrack(),
         askingNext: false
       })
     })
@@ -116,6 +122,12 @@ module.exports = React.createClass({
     this.setVolume(this.state.volume - 0.05)
   },
 
+  renderNextTrack: function () {
+    return this.state.nextTrack ? <a className="next-track" href="javascript:void(0)" onClick={this.askNextTrack}>
+      {this.state.nextTrack.artistName} - {this.state.nextTrack.title}
+    </a> : '---'
+  },
+
   render: function () {
     var keysHandlers = {
       'togglePlay': this.togglePlay,
@@ -146,6 +158,7 @@ module.exports = React.createClass({
               onTogglePlayClick={this.togglePlay}
               onToggleMuteClick={this.toggleMute}
               onVolumeChange={this.setVolume} />
+            <p style={{ textAlign: 'right' }}>Next: {this.renderNextTrack()}</p>
           </div>
           <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
             <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused} noArtistYet={this.state.playlist.artists.length == 0} />

@@ -77,8 +77,18 @@ var me = module.exports = {
       nextTracks.push(track)
       if (callback)
         callback(track)
+      else
+        me.onNextFound(nextTracks[0])
     })
     return me
+  },
+
+  nextTrack: function () {
+    return nextTracks[0]
+  },
+
+  onNextFound: function (track) {
+
   }
 }
 
