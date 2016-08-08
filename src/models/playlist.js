@@ -24,7 +24,9 @@ var me = module.exports = {
         callback(artist)
       })
     } else {
-      artists.push(artist)
+      var prevArtist = getArtistById(artist.id)
+      if (!prevArtist)
+        artists.push(artist)
       if (callback)
         setTimeout(function () { callback(artist) })
     }
@@ -44,4 +46,12 @@ var me = module.exports = {
     artist.getNextTrack(callback)
     return me
   }
+}
+
+function getArtistById(artistId) {
+  for (var i = 0; i < artists.length; i++) {
+    if (artists[i].id === artistId)
+      return artists[i]
+  }
+  return null
 }
