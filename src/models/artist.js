@@ -4,6 +4,7 @@ var recording = require('./recording')
 
 module.exports = function (props) {
   props.currentIndex = 0
+  props.foundTitles = {}
 
   props.findAllTracks = function (callback) {
     mb.searchRecordings('arid:' + props.id + ' AND type:album', { limit: 1 }, function(err, result) {
@@ -33,9 +34,15 @@ module.exports = function (props) {
     }
 
     var nextTrack = props.tracks[props.currentIndex]
+    if (nextTrack === false) {
+      // track with same title has been already found
+      incrementIndex()
+      return props.getNextTrack(callback)
+    }
+
     if (nextTrack && isNaN(nextTrack)) {
       return setTimeout(function () {
-        props.currentIndex = (props.currentIndex + 1) % props.tracks.length
+        incrementIndex()
         callback(nextTrack)
       })
     }
@@ -48,13 +55,25 @@ module.exports = function (props) {
       }
 
       var track = result.recordings[0]
+      if (props.foundTitles[track.title]) {
+        // set track index as already found title
+        props.tracks[nextTrack] = false
+        incrementIndex()
+        return props.getNextTrack(callback)
+      }
+
       track.artistId = props.id
       track.artistName = props.name
       track = recording(track)
       props.tracks[nextTrack] = track
-      props.currentIndex = (props.currentIndex + 1) % props.tracks.length
+      props.foundTitles[track.title] = track
+      incrementIndex()
       callback(track)
     })
+  }
+
+  function incrementIndex() {
+    props.currentIndex = (props.currentIndex + 1) % props.tracks.length
   }
 
   return props

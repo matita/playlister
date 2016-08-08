@@ -22,6 +22,8 @@ module.exports = React.createClass({
     var track = me.props.track
     if (track) {
       track.getSources(function (err, sources) {
+        if (err)
+          return me.props.onEnded()
         if (sources.length)
           return me.setState({ url: sources[0].link })
         me.props.onEnded()

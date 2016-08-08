@@ -51,6 +51,7 @@ var me = module.exports = {
       if (trackI != -1)
         nextTracks.splice(trackI, 1)
     }
+    me.onNextFound(nextTracks[0])
     
     return me
   },
