@@ -34,11 +34,11 @@ module.exports = function (props) {
     }
 
     var nextTrack = props.tracks[props.currentIndex]
-    if (nextTrack === false) {
+    /*if (nextTrack === false) {
       // track with same title has been already found
       incrementIndex()
       return props.getNextTrack(callback)
-    }
+    }*/
 
     if (nextTrack && isNaN(nextTrack)) {
       return setTimeout(function () {
@@ -55,12 +55,12 @@ module.exports = function (props) {
       }
 
       var track = result.recordings[0]
-      if (props.foundTitles[track.title]) {
+      /*if (props.foundTitles[track.title]) {
         // set track index as already found title
         props.tracks[nextTrack] = false
         incrementIndex()
         return props.getNextTrack(callback)
-      }
+      }*/
 
       track.artistId = props.id
       track.artistName = props.name
