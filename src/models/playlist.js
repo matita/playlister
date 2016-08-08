@@ -31,6 +31,7 @@ var me = module.exports = {
         // next track will be of the just added artist
         artist.getNextTrack(function (track) {
           nextTracks.unshift(track)
+          me.onNextFound(nextTracks[0])
         })
       }
       if (callback)
