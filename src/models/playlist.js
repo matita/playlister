@@ -2,6 +2,7 @@ var mb = require('../utils/musicbrainz')
 var Artist = require('./artist')
 
 var artists = []
+var nextTracks = []
 
 var me = module.exports = {
   artists: artists,
@@ -25,8 +26,13 @@ var me = module.exports = {
       })
     } else {
       var prevArtist = getArtistById(artist.id)
-      if (!prevArtist)
+      if (!prevArtist) {
         artists.push(artist)
+        // next track will be of the just added artist
+        artist.getNextTrack(function (track) {
+          nextTracks.unshift(track)
+        })
+      }
       if (callback)
         setTimeout(function () { callback(artist) })
     }
@@ -37,13 +43,41 @@ var me = module.exports = {
     var i = artists.indexOf(artist)
     if (i != -1)
       artists.splice(i, 1)
+
+    var nextTracksToRemove = nextTracks.filter(function (track) { return track.artistId === artist.id })
+    for (i = 0; i < nextTracksToRemove.length; i++) {
+      var trackI = nextTracks.indexOf(nextTracksToRemove[i])
+      if (trackI != -1)
+        nextTracks.splice(trackI, 1)
+    }
+    
     return me
   },
 
   getNextTrack: function (callback) {
+    if (nextTracks.length) {
+      setTimeout(function () { 
+        callback(nextTracks.shift())
+      })
+      me.peekNext()
+    } else {
+      me.peekNext(function (track) {
+        me.getNextTrack(callback)
+        me.peekNext()
+      })
+    }
+    
+    return me
+  },
+
+  peekNext: function(callback) {
     var artistIndex = Math.floor(Math.random() * artists.length)
     var artist = artists[artistIndex]
-    artist.getNextTrack(callback)
+    artist.getNextTrack(function (track) {
+      nextTracks.push(track)
+      if (callback)
+        callback(track)
+    })
     return me
   }
 }

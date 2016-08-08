@@ -35,7 +35,7 @@ module.exports = function (props) {
     var nextTrack = props.tracks[props.currentIndex]
     if (nextTrack && isNaN(nextTrack)) {
       return setTimeout(function () {
-        props.currentIndex++
+        props.currentIndex = (props.currentIndex + 1) % props.tracks.length
         callback(nextTrack)
       })
     }
@@ -48,10 +48,11 @@ module.exports = function (props) {
       }
 
       var track = result.recordings[0]
+      track.artistId = props.id
       track.artistName = props.name
       track = recording(track)
       props.tracks[nextTrack] = track
-      props.currentIndex++
+      props.currentIndex = (props.currentIndex + 1) % props.tracks.length
       callback(track)
     })
   }

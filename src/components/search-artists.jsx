@@ -156,7 +156,7 @@ module.exports = React.createClass({
       {results}
     </ul> : '')
 
-    var prompt = this.props.noArtistYet ? 'Which artist do you want to listen to?' : 'Another artist?'
+    var prompt = this.props.noArtistYet ? 'Which artist do you want to listen to?' : 'Some artist to add?'
 
     return (
       <HotKeys handlers={keysHandlers}>
