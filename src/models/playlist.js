@@ -58,14 +58,12 @@ var me = module.exports = {
 
   getNextTrack: function (callback) {
     if (nextTracks.length) {
-      setTimeout(function () { 
-        callback(nextTracks.shift())
-      })
+      callback(nextTracks.shift())
       me.peekNext()
     } else {
       me.peekNext(function (track) {
         me.getNextTrack(callback)
-        me.peekNext()
+        //me.peekNext()
       })
     }
     

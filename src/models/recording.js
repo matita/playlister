@@ -7,7 +7,7 @@ module.exports = function (props) {
 
   props.getSources = function (callback) {
     if (props.sources)
-      return setTimeout(function () { callback(props.sources) })
+      return setTimeout(function () { callback(null, props.sources) })
 
     var searchText = props.artistName + ' ' + props.title
     search(searchText, { maxResults: 5, type: 'video', key: YT_KEY }, function (err, results) {
@@ -21,11 +21,6 @@ module.exports = function (props) {
 
         result.items.forEach(mergeParts(results))
         props.sources = results.sort(sortByDuration)
-        console.log('------------')
-        console.log('Record duration', props.length / 1000, props.artistName + ' - ' + props.title)
-        props.sources.forEach(function (s) {
-          console.log('source duration', durationToSeconds(s.contentDetails.duration), s.title)
-        })
         callback(null, props.sources)
       })
     })
