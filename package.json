@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean:js:dist": "rimraf public/js/app.js",
-    "build:css": "lessc less/main.less public/css/style.css",
+    "build:css": "lessc less/main.less public/css/style.css --autoprefix=\"last 2 versions\"",
     "build:js": "browserify -t [ babelify --presets [ react ] ] src/main.js -o public/js/app.js --debug",
     "build:js:dist": "browserify -t [ babelify --presets [ react ] ] src/main.js | uglifyjs > public/js/app.js",
     "watch:css": "watch \"npm run build:css\" less",

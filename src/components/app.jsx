@@ -35,7 +35,7 @@ module.exports = React.createClass({
       tracks: [],
       currentTrack: null,
       nextTrack: null,
-      playing: true,
+      playing: false,
       askingNext: false,
       volume: 0.2,
       muted: false,
@@ -96,6 +96,10 @@ module.exports = React.createClass({
       if (this.state.playlist.artists.length)
         this.askNextTrack()
     }
+
+    if (!this.state.playlist.artists.length)
+      nextState.playing = false
+
     this.setState(nextState)
   },
 
@@ -145,30 +149,28 @@ module.exports = React.createClass({
     })
 
     return (
-      <HotKeys keyMap={keysMap} handlers={keysHandlers}>
-        <div className="app">
-          <div className={'player-container' + (this.state.playlist.artists.length ? '' : ' hidden')}>
-            <Player 
-              track={this.state.currentTrack} 
-              playing={this.state.playing}
-              volume={this.state.volume}
-              muted={this.state.muted}
-              askingNext={this.state.askingNext}
-              onEnded={this.askNextTrack}
-              onTogglePlayClick={this.togglePlay}
-              onToggleMuteClick={this.toggleMute}
-              onVolumeChange={this.setVolume} />
-            <p style={{ textAlign: 'right' }}>Next: {this.renderNextTrack()}</p>
-          </div>
-          <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
-            <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused} noArtistYet={this.state.playlist.artists.length == 0} />
-            <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
-            <div className="tracks">
-              <h2>Tracks</h2>
-              <ul>
-                {tracks}
-              </ul>
-            </div>
+      <HotKeys className="app" keyMap={keysMap} handlers={keysHandlers}>
+        <div className={'player-container' + (this.state.playlist.artists.length ? '' : ' hidden')}>
+          <Player 
+            track={this.state.currentTrack} 
+            playing={this.state.playing}
+            volume={this.state.volume}
+            muted={this.state.muted}
+            askingNext={this.state.askingNext}
+            onEnded={this.askNextTrack}
+            onTogglePlayClick={this.togglePlay}
+            onToggleMuteClick={this.toggleMute}
+            onVolumeChange={this.setVolume} />
+          <p style={{ textAlign: 'right' }}>Next: {this.renderNextTrack()}</p>
+        </div>
+        <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
+          <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused} noArtistYet={this.state.playlist.artists.length == 0} />
+          <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
+          <div className="tracks">
+            <h2>Tracks</h2>
+            <ul>
+              {tracks}
+            </ul>
           </div>
         </div>
       </HotKeys>
