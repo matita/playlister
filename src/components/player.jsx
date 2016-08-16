@@ -7,6 +7,7 @@ module.exports = React.createClass({
   getInitialState: function () {
     return {
       url: null,
+      playing: this.props.playing,
       played: 0,
       duration: 0
     }
@@ -15,6 +16,8 @@ module.exports = React.createClass({
   componentDidUpdate: function (prevProps, prevState) {
     if (prevProps.track !== this.props.track)
       this.askSources()
+    if (prevProps.playing !== this.props.playing)
+      this.setState({ playing: this.props.playing })
   },
 
   askSources: function () {
@@ -54,6 +57,14 @@ module.exports = React.createClass({
     this.refs.player.seekTo(fraction)
   },
 
+  handlePlayerPlay: function () {
+    this.setState({ playing: true })
+  },
+
+  handlePlayerPause: function () {
+    this.setState({ playing: false })
+  },
+
   handleProgressChange: function (progress) {
     this.setState({ played: progress.played })
   },
@@ -73,9 +84,11 @@ module.exports = React.createClass({
           width='100%'
           height='100%'
           url={this.state.url} 
-          playing={this.props.playing} 
+          playing={this.state.playing} 
           volume={this.props.muted ? 0 : this.props.volume}
           onEnded={this.props.onEnded}
+          onPlay={this.handlePlayerPlay}
+          onPause={this.handlePlayerPause}
           onProgress={this.handleProgressChange}
           onDuration={this.handleDuration} />
       </div>
@@ -85,7 +98,7 @@ module.exports = React.createClass({
       </div>
       <div className="player-controls">
         <button className="player-controls-play" onClick={this.props.onTogglePlayClick}>
-          <i className={'fa fa-' + (this.props.playing ? 'pause' : 'play')}></i>
+          <i className={'fa fa-' + (this.state.playing ? 'pause' : 'play')}></i>
         </button>
         <button className="player-controls-next" disabled={this.props.askingNext} onClick={this.props.onEnded}>
           <i className={'fa fa-' + (this.props.askingNext ? 'spinner fa-spin' : 'step-forward')}></i>
