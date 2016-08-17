@@ -9,12 +9,21 @@ module.exports = function (props) {
   var prevTracks = []
   var nextTracks = []
   var trackIndexesToAsk = []
+  var isSearchingAllTracks = false
   
   props.findAllTracks = function (callback) {
+    if (isSearchingAllTracks)
+      return setTimeout(function () { props.findAllTracks(callback) }, 100)
+
+    if ('tracksCount' in props)
+      return callback()
+
+    isSearchingAllTracks = true
     mb.searchRecordings('arid:' + props.id + ' AND type:album', { limit: 1 }, function(err, result) {
       if (err)
         return setTimeout(function () { props.findAllTracks(callback) }, 1000)
 
+      isSearchingAllTracks = false
       props.tracksCount = result.count
       props.shuffle()
 
