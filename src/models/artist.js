@@ -45,6 +45,11 @@ module.exports = function (props) {
       })
     }
 
+    if (!trackIndexesToAsk.length && !prevTracks.length) {
+      // artist is taken from localStorage and still has to be intialized
+      props.shuffle();
+    }
+
     // get next track from the queue
     var nextTrack = nextTracks.shift()
     if (nextTrack) {

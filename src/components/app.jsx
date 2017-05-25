@@ -20,6 +20,7 @@ module.exports = React.createClass({
     var playlist = require('../models/playlist')
     var artistIds = window.location.hash.replace('#/', '').split('+').filter(function (id) { return !!id })
     if (artistIds.length) {
+      window.location.hash = '';
       playlist.addArtist(artistIds, function () {
         me.setState({ playlist: playlist })
         me.askNextTrack()
@@ -37,16 +38,23 @@ module.exports = React.createClass({
       nextTrack: null,
       playing: false,
       askingNext: false,
-      volume: 0.2,
+      volume: localStorage['playlister_volume'] && JSON.parse(localStorage['playlister_volume']) || 0.2,
       muted: false,
       searchIsFocused: !artistIds.length
     }
   },
 
+
+  componentDidMount: function () {
+    if (this.state.playlist.artists.length && !this.state.askingNext)
+      this.askNextTrack();
+  },
+
+
   componentDidUpdate: function (prevProps, prevState) {
     if (prevState.currentTrack != this.state.currentTrack)
       this.updateDocumentTitle()
-    this.updateLocation()
+    //this.updateLocation()
   },
 
   updateDocumentTitle: function () {
@@ -112,10 +120,13 @@ module.exports = React.createClass({
   },
 
   setVolume: function (val) {
+    var vol = Math.max(0, Math.min(+val, 1))
     this.setState({ 
-      volume: Math.max(0, Math.min(+val, 1)),
+      volume: vol,
       muted: false
     })
+
+    localStorage['playlister_volume'] = JSON.stringify(vol);
   },
 
   volumeUp: function () {

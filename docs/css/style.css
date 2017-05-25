@@ -30,6 +30,7 @@ div:focus {
   margin-top: 0;
   transition: 0.5s margin-top, 0.5s opacity;
   opacity: 1;
+  padding-top: 10px;
 }
 .player-container.hidden {
   margin-top: -50%;
