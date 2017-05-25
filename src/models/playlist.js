@@ -44,6 +44,8 @@ var me = module.exports = {
         me.save()
         // next track will be of the just added artist
         artist.getNextTrack(function (track) {
+          if (!track)
+            return;
           nextTracks.unshift(track)
           me.onNextFound(nextTracks[0])
         })
@@ -66,7 +68,13 @@ var me = module.exports = {
       if (trackI != -1)
         nextTracks.splice(trackI, 1)
     }
-    me.onNextFound(nextTracks[0])
+
+    if (nextTracks.length)
+      me.onNextFound(nextTracks[0])
+    else
+      me.peekNext();
+
+    me.save()
     
     return me
   },
@@ -87,9 +95,14 @@ var me = module.exports = {
   },
 
   peekNext: function(callback) {
-    var artistIndex = Math.floor(Math.random() * artists.length)
-    var artist = artists[artistIndex]
+    var artistsWithSongs = artists.filter(function (artist) { return artist.tracksCount !== 0 })
+    var artistIndex = Math.floor(Math.random() * artistsWithSongs.length)
+    var artist = artistsWithSongs[artistIndex]
+
     artist.getNextTrack(function (track) {
+      if (!track)
+        return me.peekNext(callback);
+
       nextTracks.push(track)
       if (callback)
         callback(track)

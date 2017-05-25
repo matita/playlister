@@ -151,13 +151,15 @@ module.exports = React.createClass({
       'volumeDown': this.volumeDown
     }
 
-    var tracks = this.state.tracks.map(function (track, i) {
-      var sources = track.sources ? track.sources.map(function (source, j) {
-        return <li key={j}><a href={source.link} target="_blank">{source.title}</a></li>
-      }) : ''
+    var tracks = this.state.tracks
+      .filter(function (track) { return !!track })
+      .map(function (track, i) {
+        var sources = track.sources ? track.sources.map(function (source, j) {
+          return <li key={j}><a href={source.link} target="_blank">{source.title}</a></li>
+        }) : ''
 
-      return <li key={i}>{track.artistName} - {track.title} <ul>{sources}</ul></li>
-    })
+        return <li key={i}>{track.artistName} - {track.title} <ul>{sources}</ul></li>
+      })
 
     return (
       <HotKeys keyMap={keysMap} handlers={keysHandlers}>
