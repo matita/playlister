@@ -6,7 +6,7 @@ var displayTime = require('../utils/display-time')
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      url: null,
+      source: null,
       playing: this.props.playing,
       played: 0,
       duration: 0
@@ -28,7 +28,7 @@ module.exports = React.createClass({
         if (err)
           return me.props.onEnded()
         if (sources.length)
-          return me.setState({ url: sources[0].link })
+          return me.setState({ source: sources[0] })
         me.props.onEnded()
       })
     }
@@ -75,6 +75,7 @@ module.exports = React.createClass({
 
   render: function () {
     var track = this.props.track || {}
+    var source = this.state.source || { title: '---', link: null }
 
     return (<div className="player">
       <div className="player-wrapper">
@@ -83,7 +84,7 @@ module.exports = React.createClass({
           className="player-div"
           width='100%'
           height='100%'
-          url={this.state.url} 
+          url={source.link} 
           playing={this.state.playing} 
           volume={this.props.muted ? 0 : this.props.volume}
           onEnded={this.props.onEnded}
@@ -92,6 +93,7 @@ module.exports = React.createClass({
           onProgress={this.handleProgressChange}
           onDuration={this.handleDuration} />
       </div>
+      <div className="player-source-title">{source.title}</div>
       <div className="player-track">
         <div className="player-track-title">{track.title || '---'}</div>
         <div className="player-track-artist">{track.artistName || '---'}</div>

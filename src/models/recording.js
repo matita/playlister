@@ -10,6 +10,8 @@ module.exports = function (props) {
       return setTimeout(function () { callback(null, props.sources) })
 
     var searchText = props.artistName + ' ' + props.title
+    var searchedWords = searchText.toLowerCase().split(/(-|\s|')/)
+
     search(searchText, { maxResults: 5, type: 'video', key: YT_KEY }, function (err, results) {
       if (err)
         return callback(err)
@@ -21,6 +23,7 @@ module.exports = function (props) {
 
         result.items.forEach(mergeParts(results))
         props.sources = results
+          .filter(matchAllWords(searchedWords))
           .map(withScore)
           .sort(sortByScore)
         callback(null, props.sources)
@@ -31,6 +34,18 @@ module.exports = function (props) {
   function getDurationDelta(v) {
     var videoDuration = durationToSeconds(v.contentDetails.duration) * 1000
     return Math.abs(videoDuration - props.length)
+  }
+
+  function matchAllWords (words) {
+    return function (source) {
+      var sourceTitle = source.title.toLowerCase()
+      for (var i = 0; i < words.length; i++) {
+        var word = words[i];
+        if (sourceTitle.indexOf(word) === -1)
+          return false
+      }
+      return true
+    }
   }
 
   function withScore(source) {

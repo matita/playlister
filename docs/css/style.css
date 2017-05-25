@@ -59,6 +59,9 @@ div:focus {
   left: 0;
   background: #000;
 }
+.player-source-title {
+  color: #999;
+}
 .player-track {
   padding: .5em 0;
 }
