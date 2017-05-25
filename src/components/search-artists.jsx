@@ -10,7 +10,8 @@ module.exports = React.createClass({
       searchText: '',
       lastSearchText: '',
       results: [],
-      selectedIndex: -1
+      selectedIndex: -1,
+      hasFocus: false
     }
   },
 
@@ -91,6 +92,22 @@ module.exports = React.createClass({
     this.setState(this.getInitialState())
   },
 
+  handleFocus: function () {
+    this.setState({ hasFocus: true })
+    if (this.blurTimeout) {
+      clearTimeout(this.blurTimeout)
+      this.blurTimeout = 0
+    }
+  },
+
+  handleBlur: function () {
+    var me = this
+    me.blurTimeout = setTimeout(function () {
+      me.blurTimeout = 0
+      me.setState({ hasFocus: false })
+    }, 250)
+  },
+
   selectUp: function () {
     this.setState({
       selectedIndex: (this.state.selectedIndex - 1) % this.state.results.length
@@ -124,25 +141,38 @@ module.exports = React.createClass({
     }
 
     var results = this.state.searching ? <i>Loading</i> : this.state.results.length === 0 ? '' : this.state.results.map(function (artist, i) {
-      var disambiguation = artist.disambiguation ? ' - ' + artist.disambiguation : ''
+      var disambiguation = artist.disambiguation ? artist.disambiguation : ''
       var className = 'search-artists-item'
       if (me.state.selectedIndex === i)
         className += ' selected'
 
       return (<li key={i} className={className} onClick={me.handleItemClick.bind(me, artist)}>
-          {artist.name}{disambiguation}
+          <span className="search-artists-item-name">{artist.name}</span>
+          <span className="search-artists-item-disambiguation">{disambiguation}</span>
         </li>)
     })
+
+    var resultsWrapper = ((this.state.hasFocus && this.state.searchText && this.state.results.length) || this.state.searching ? <ul className="search-artists-results">
+      {results}
+    </ul> : '')
+
+    var prompt = this.props.noArtistYet ? 'Which artist do you want to listen to?' : 'Some artist to add?'
 
     return (
       <HotKeys handlers={keysHandlers}>
         <div className="search-artists">
+          <h2 className="search-artists-prompt">{prompt}</h2>
           <div className="search-artists-container">
-            <input ref="input" type="search" placeholder="Add artist" value={this.state.searchText} onInput={this.handleInput} onKeyPress={this.handleKeyPress} />
+            <input 
+              ref="input" 
+              placeholder="artist name"
+              value={this.state.searchText}
+              onInput={this.handleInput}
+              onKeyPress={this.handleKeyPress}
+              onFocus={this.handleFocus}
+              onBlur={this.handleBlur} />
           </div>
-          <ul className="search-artists-results">
-            {results}
-          </ul>
+          {resultsWrapper}
         </div>
       </HotKeys>
     )

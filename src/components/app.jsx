@@ -26,13 +26,19 @@ module.exports = React.createClass({
       })
     }
 
+    playlist.onNextFound = function (track) {
+      me.setState({ nextTrack: track })
+    }
+
     return {
       playlist: playlist,
       tracks: [],
       currentTrack: null,
-      playing: true,
+      nextTrack: null,
+      playing: false,
       askingNext: false,
       volume: 0.2,
+      muted: false,
       searchIsFocused: !artistIds.length
     }
   },
@@ -65,6 +71,7 @@ module.exports = React.createClass({
       me.setState({ 
         tracks: me.state.tracks.concat(track),
         currentTrack: track,
+        nextTrack: me.state.playlist.nextTrack(),
         askingNext: false
       })
     })
@@ -89,6 +96,10 @@ module.exports = React.createClass({
       if (this.state.playlist.artists.length)
         this.askNextTrack()
     }
+
+    if (!this.state.playlist.artists.length)
+      nextState.playing = false
+
     this.setState(nextState)
   },
 
@@ -96,8 +107,15 @@ module.exports = React.createClass({
     this.setState({ playing: !this.state.playing })
   },
 
+  toggleMute: function () {
+    this.setState({ muted: !this.state.muted })
+  },
+
   setVolume: function (val) {
-    this.setState({ volume: Math.max(0, Math.min(+val, 1)) })
+    this.setState({ 
+      volume: Math.max(0, Math.min(+val, 1)),
+      muted: false
+    })
   },
 
   volumeUp: function () {
@@ -106,6 +124,12 @@ module.exports = React.createClass({
 
   volumeDown: function () {
     this.setVolume(this.state.volume - 0.05)
+  },
+
+  renderNextTrack: function () {
+    return this.state.nextTrack ? <a className="next-track" href="javascript:void(0)" onClick={this.askNextTrack}>
+      {this.state.nextTrack.artistName} - {this.state.nextTrack.title}
+    </a> : '---'
   },
 
   render: function () {
@@ -127,19 +151,22 @@ module.exports = React.createClass({
     return (
       <HotKeys keyMap={keysMap} handlers={keysHandlers}>
         <div className="app">
-          <div className="player-container">
+          <div className={'player-container' + (this.state.playlist.artists.length ? '' : ' hidden')}>
             <Player 
               track={this.state.currentTrack} 
               playing={this.state.playing}
               volume={this.state.volume}
+              muted={this.state.muted}
               askingNext={this.state.askingNext}
               onEnded={this.askNextTrack}
               onTogglePlayClick={this.togglePlay}
+              onToggleMuteClick={this.toggleMute}
               onVolumeChange={this.setVolume} />
+            <p style={{ textAlign: 'right' }}>Next: {this.renderNextTrack()}</p>
           </div>
-          <div className="playlist-container">
+          <div className={'playlist-container' + (this.state.playlist.artists.length ? '' : ' maximized')}>
+            <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused} noArtistYet={this.state.playlist.artists.length == 0} />
             <ArtistsList artists={this.state.playlist.artists} onRemove={this.handleArtistRemove} />
-            <SearchArtists onArtistClicked={this.handleArtistClicked} focused={this.state.searchIsFocused}/>
             <div className="tracks">
               <h2>Tracks</h2>
               <ul>

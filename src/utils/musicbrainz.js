@@ -4,7 +4,9 @@ var asyncThrottle = require('./async-throttle')(1000)
 
 var baseUrl = '//musicbrainz.org/ws/2/'
 
-function api (endpoint, params, callback) {
+function api (endpoint, params, callback, timeoutMs) {
+  if (!timeoutMs)
+    timeoutMs = 500
   if (typeof params == 'function') {
     callback = params
     params = {}
@@ -17,7 +19,7 @@ function api (endpoint, params, callback) {
     request({ uri: url, json: true }, function (err, response, body) {
       //done()
       if (err || body && body.error)
-        return setTimeout(function () { api(endpoint, params, callback) }, 500)
+        return setTimeout(function () { api(endpoint, params, callback, timeoutMs + 100) }, timeoutMs)
 
       callback(err, body)
     })

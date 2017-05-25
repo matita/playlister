@@ -4,12 +4,26 @@ var recording = require('./recording')
 
 module.exports = function (props) {
   props.currentIndex = 0
+  props.foundTitles = {}
 
+  var prevTracks = []
+  var nextTracks = []
+  var trackIndexesToAsk = []
+  var isSearchingAllTracks = false
+  
   props.findAllTracks = function (callback) {
-    mb.searchRecordings('arid:' + props.id, { limit: 1 }, function(err, result) {
+    if (isSearchingAllTracks)
+      return setTimeout(function () { props.findAllTracks(callback) }, 100)
+
+    if ('tracksCount' in props)
+      return callback()
+
+    isSearchingAllTracks = true
+    mb.searchRecordings('arid:' + props.id + ' AND type:album', { limit: 1 }, function(err, result) {
       if (err)
         return setTimeout(function () { props.findAllTracks(callback) }, 1000)
 
+      isSearchingAllTracks = false
       props.tracksCount = result.count
       props.shuffle()
 
@@ -19,39 +33,58 @@ module.exports = function (props) {
   }
 
   props.shuffle = function () {
-    var tracks = []
     for (var i = 0; i < props.tracksCount; i++)
-      tracks[i] = i
-    props.tracks = shuffle(tracks)
+      trackIndexesToAsk[i] = i
+    trackIndexesToAsk = shuffle(trackIndexesToAsk)
   }
 
   props.getNextTrack = function (callback) {
-    if (!props.tracks) {
+    if (!('tracksCount' in props)) {
       return props.findAllTracks(function () {
         props.getNextTrack(callback)
       })
     }
 
-    var nextTrack = props.tracks[props.currentIndex]
-    if (nextTrack && isNaN(nextTrack)) {
-      return setTimeout(function () {
-        props.currentIndex++
-        callback(nextTrack)
+    // get next track from the queue
+    var nextTrack = nextTracks.shift()
+    if (nextTrack) {
+      prevTracks.push(nextTrack)
+      return callback(nextTrack)
+    }
+    
+    // no track in the queue, asking a new one
+    var trackIndex = trackIndexesToAsk.shift()
+    if (!isNaN(trackIndex)) {
+      return askTrack(trackIndex, function () {
+        props.getNextTrack(callback)
       })
     }
 
-    mb.searchRecordings('arid:' + props.id, { limit: 1, offset: nextTrack }, function (err, result) {
+    // no other track to ask, repeat the playlist
+    var prevTrack = prevTracks.shift()
+    nextTracks.push(prevTrack)
+    props.getNextTrack(callback)
+  }
+
+  function askTrack (offset, callback) {
+    mb.searchRecordings('arid:' + props.id, { limit: 1, offset: offset }, function (err, result) {
       if (err || !result || !result.recordings) {
         return setTimeout(function () {
-          props.getNextTrack(callback)
+          props.askTrack(offset, callback)
         }, 1000)
       }
 
+    
       var track = result.recordings[0]
+      if (props.foundTitles[track.title]) {
+        return callback(track)
+      }
+
+      props.foundTitles[track.title] = track
+      track.artistId = props.id
       track.artistName = props.name
       track = recording(track)
-      props.tracks[nextTrack] = track
-      props.currentIndex++
+      nextTracks.push(track)
       callback(track)
     })
   }
