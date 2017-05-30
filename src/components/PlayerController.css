@@ -1,0 +1,41 @@
+.player-controller {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.player-controller button {
+  color: #555;
+}
+
+.player-controller-time,
+.player-controller-duration {
+  padding: 5px;
+  color: #999;
+}
+
+.player-seekbar {
+  flex: 1;
+}
+
+.prev-btn,
+.next-btn {
+  font-size: 1.5em;
+  background: none;
+  border: none;
+  margin-left: .5em;
+  margin-right: .5em;
+}
+
+.play-btn,
+.pause-btn {
+  font-size: 2em;
+  background: none;
+  border: none;
+  padding: .5em;
+}
+
+.player-volume-icon {
+  padding-left: 1em;
+  padding-right: .2em;
+}

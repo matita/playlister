@@ -1,0 +1,60 @@
+.artists-search {
+  padding: 10px;
+}
+
+
+.artists-search-prompt {
+  text-align: center;
+  display: none;
+}
+
+.artists-search-input {
+  width: 100%;
+  padding: 4px;
+  border: none;
+  border-bottom: 3px solid #ddd;
+  font-size: 20px;
+  outline: 0;
+  transition: border-bottom-color .2s;
+}
+
+.artists-search-input:focus {
+  border-bottom-color: #555;
+}
+
+
+.artists-search-results {
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.artists-search-result {
+  padding: 5px 10px;
+}
+
+.artists-search-result-selected {
+  background: #555;
+  color: #ddd;
+}
+
+.no-result {
+  text-align: center;
+  color: #aaa;
+}
+
+
+.artists-search-open .artists-search-results {
+  display: block;
+}
+
+.search-error {
+  color: #f00;
+}
+
+
+.first-time .artists-search-prompt {
+  display: block;
+}

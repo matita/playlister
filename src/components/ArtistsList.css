@@ -1,0 +1,43 @@
+.artists-list {
+  overflow: auto;
+  flex: 1;
+}
+
+
+.artists-list-items {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.artists-list-item {
+  padding: 5px 10px;
+  display: flex;
+}
+
+.artists-item-meta {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+.first-time .artists-list {
+  display: none;
+}
+
+.artists-item-actions {
+  
+}
+
+.artists-item-action {
+  border: none;
+  background: none;
+  color: #999;
+  transition: color .2s;
+}
+
+.artists-item-action:hover {
+  color: #555;
+}

@@ -1,0 +1,56 @@
+.App {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.header {
+  padding: 10px;
+  color: #ddd;
+  border-bottom: 1px solid #eee;
+}
+
+.app-name {
+  font-size: 1.2em;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  border-bottom: 1px solid;
+}
+
+main {
+  flex: 1;
+  display:flex;
+}
+
+.artists-container {
+  width: 400px;
+  height: 100%;
+  flex: 2;
+  transition: flex .2s;
+}
+
+.player-container {
+  flex: 6;
+  transition: flex .2s;
+}
+
+.tracks {
+  display: none;
+}
+
+
+.first-time .artists-container {
+  flex: 1;
+}
+
+.first-time .player-container {
+  overflow: hidden;
+  flex: 0;
+}

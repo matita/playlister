@@ -4,7 +4,7 @@ var DAY = 24 * HOUR
 var MONTH = 30 * DAY
 var YEAR = 365 * DAY
 
-module.exports = function (durationStr) {
+export default function (durationStr) {
   var re = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(\.\d+)?)S)?/
   var match = durationStr.match(re)
   var y = +match[1] * YEAR || 0
@@ -14,4 +14,4 @@ module.exports = function (durationStr) {
   var m = +match[5] * MINUTE || 0
   var s = +match[6] || 0
   return y + M + d + h + m + s
-}
+};

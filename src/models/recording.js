@@ -1,42 +1,40 @@
-var search = require('youtube-search')
-var yt = require('../utils/youtube-api')
-var YT_KEY = 'AIzaSyDyZVX8On7QglmGjrarAAsr8aLnoWp9Lck'
-var durationToSeconds = require('../utils/iso8601-seconds')
+import YouTube from '../api/YouTube';
 
-module.exports = function (props) {
+class Recording {
 
-  props.getSources = function (callback) {
-    if (props.sources)
-      return setTimeout(function () { callback(null, props.sources) })
+  constructor(props) {
 
-    var searchText = props.artistName + ' ' + props.title
-    var searchedWords = searchText.toLowerCase().split(/(-|\s|')/)
+    this.id = props.id;
+    this.title = props.title;
+    this.length = props.length;
 
-    search(searchText, { maxResults: 5, type: 'video', key: YT_KEY }, function (err, results) {
+  }
+
+
+  searchSources(callback) {
+    if (!this.searchText)
+      this.searchText = (this.artistName + ' ' + this.title).toLowerCase();
+    
+    YouTube.search(this.searchText, (err, sources) => {
       if (err)
-        return callback(err)
+        return callback(err);
 
-      var ids = results.map(function(r) { return r.id })
-      yt.getDetails(ids, function(err, result) {
-        if (err)
-          return callback(err)
-
-        result.items.forEach(mergeParts(results))
-        props.sources = results
-          .filter(matchAllWords(searchedWords))
-          .map(withScore)
-          .sort(sortByScore)
-        callback(null, props.sources)
-      })
-    })
+      var words = this.searchText.toLowerCase().split(/\s+/g);
+      this.sources = sources.filter(this.matchAllWords(words));
+      this.sources.forEach(s => this.applyScore(s));
+      this.sources.sort((s1, s2) => s2.score - s1.score);
+      callback(null, this.sources);
+    });
   }
 
-  function getDurationDelta(v) {
-    var videoDuration = durationToSeconds(v.contentDetails.duration) * 1000
-    return Math.abs(videoDuration - props.length)
+
+  getDurationDelta(v) {
+    var videoDuration = v.duration * 1000
+    return Math.abs(videoDuration - this.length)
   }
 
-  function matchAllWords (words) {
+
+  matchAllWords(words) {
     return function (source) {
       var sourceTitle = source.title.toLowerCase()
       for (var i = 0; i < words.length; i++) {
@@ -48,46 +46,30 @@ module.exports = function (props) {
     }
   }
 
-  function withScore(source) {
-    var sourceTitle = source.title.toLowerCase()
-    var recordingTitle = props.title.toLowerCase()
 
-    var sourceHasLyrics = sourceTitle.indexOf('lyrics') !== -1
-    var recordingHasLyrics = recordingTitle.indexOf('lyrics') !== -1
-    var lyricsScore = sourceHasLyrics && !recordingHasLyrics ? 100 : 0
+  applyScore(source) {
+    var sourceTitle = source.title.toLowerCase();
+    var recordingTitle = this.title.toLowerCase();
 
-    var sourceIsLive = sourceTitle.indexOf('live') !== -1
-    var recordingIsLive = recordingTitle.indexOf('live') !== -1
-    var liveScore = sourceIsLive && !recordingIsLive ? -100 : 0
+    var sourceHasLyrics = sourceTitle.indexOf('lyrics') !== -1;
+    var recordingHasLyrics = recordingTitle.indexOf('lyrics') !== -1;
+    var lyricsScore = sourceHasLyrics && !recordingHasLyrics ? 100 : 0;
 
-    var durationDelta = getDurationDelta(source) / 1000
-    var durationScore = isNaN(props.length) ? 0 : 50 / (durationDelta || 1)
+    var sourceIsLive = sourceTitle.indexOf('live') !== -1;
+    var recordingIsLive = recordingTitle.indexOf('live') !== -1;
+    var liveScore = sourceIsLive && !recordingIsLive ? -100 : 0;
 
-    source.score = lyricsScore + liveScore + durationScore
-    
-    return source
+    var sourceIsRemix = sourceTitle.indexOf('remix') !== -1;
+    var recordingIsRemix = recordingTitle.indexOf('remix') !== -1;
+    var remixScore = sourceIsRemix && !recordingIsRemix ? -100 : 0;
+
+    var durationDelta = this.getDurationDelta(source) / 1000;
+    var durationScore = isNaN(this.length) ? 0 : 50 / (durationDelta || 1);
+
+    source.score = lyricsScore + liveScore + durationScore + remixScore;
   }
 
-  function sortByScore(s1, s2) {
-    return s2.score - s1.score
-  }
-
-  function sortByDuration(v1, v2) {
-    var delta1 = getDurationDelta(v1)
-    var delta2 = getDurationDelta(v2)
-    return delta1 - delta2
-  }
-
-  return props
 }
 
-function mergeParts(items) {
-  return function (item) {
-    var id = item.id
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].id !== id)
-        continue
-      items[i].contentDetails = item.contentDetails
-    }
-  }
-}
+
+export default Recording;

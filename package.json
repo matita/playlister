@@ -1,43 +1,22 @@
 {
-  "name": "playlister",
+  "name": "playlister-react",
   "version": "0.1.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean:js:dist": "rimraf docs/js/app.js",
-    "build:css": "lessc less/main.less docs/css/style.css --autoprefix=\"last 2 versions\"",
-    "build:js": "browserify -t [ babelify --presets [ react ] ] src/main.js -o docs/js/app.js --debug",
-    "build:js:dist": "browserify -t [ babelify --presets [ react ] ] src/main.js | uglifyjs > docs/js/app.js",
-    "watch:css": "watch \"npm run build:css\" less",
-    "watch:js": "watch \"npm run build:js\" src",
-    "livereload": "live-reload --port 3001 docs/",
-    "serve": "http-server ./docs -p 4001",
-    "dev": "parallelshell \"npm run serve\" \"npm run livereload\" \"npm run watch:js\" \"npm run watch:css\""
-  },
-  "repository": {},
-  "author": "Matita",
-  "license": "ISC",
+  "private": true,
+  "homepage": "https://matita.github.io/playlister",
   "dependencies": {
-    "babel-preset-react": "^6.5.0",
-    "babelify": "^7.2.0",
-    "browser-request": "^0.3.3",
-    "musicbrainz": "^0.2.6",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1",
-    "react-hotkeys": "^0.9.0",
-    "react-player": "^0.8.0",
-    "shuffle-array": "^1.0.0",
-    "youtube-search": "^1.0.6"
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   },
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "less": "^2.6.1",
-    "less-plugin-autoprefix": "^1.5.1",
-    "live-reload": "^1.1.0",
-    "parallelshell": "^2.0.0",
-    "rimraf": "^2.5.4",
-    "uglify-js": "^2.7.0",
-    "watch": "^0.17.1"
+    "browser-request": "^0.3.3",
+    "react-player": "^0.18.0",
+    "react-scripts": "1.0.6",
+    "youtube-search": "^1.0.9"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

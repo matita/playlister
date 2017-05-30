@@ -1,102 +1,150 @@
-var shuffle = require('shuffle-array')
-var mb = require('../utils/musicbrainz')
-var recording = require('./recording')
+import { shuffle } from 'lodash';
+import MusicBrainz from '../api/MusicBrainz';
+import Recording from './Recording';
 
-module.exports = function (props) {
-  props.currentIndex = 0
-  props.foundTitles = {}
 
-  var prevTracks = []
-  var nextTracks = []
-  var trackIndexesToAsk = []
-  var isSearchingAllTracks = false
+class Artist {
+
+  constructor(props) {
+
+    this.id = props.id;
+    this.name = props.name;
+    this.disambiguation = props.disambiguation;
+
+    this.indexesToSearch = null;
+    this.prevIndexes = [];
+    this.foundTracks = [];
   
-  props.findAllTracks = function (callback) {
-    if (isSearchingAllTracks)
-      return setTimeout(function () { props.findAllTracks(callback) }, 100)
+    this.onTracksCountFound = props.onTracksCountFound || function () {};
+    this.onTrackFound = props.onTrackFound || function () {};
+  }
 
-    if ('tracksCount' in props)
-      return callback()
 
-    isSearchingAllTracks = true
-    mb.searchRecordings('arid:' + props.id + ' AND type:album', { limit: 1 }, function(err, result) {
+  findTracksCount(callback) {
+    this.isSearchingAllTracks = true; 
+    MusicBrainz.searchRecordings('arid:' + this.id + ' AND type:album', { limit: 1 }, (err, result) => {
       if (err)
-        return setTimeout(function () { props.findAllTracks(callback) }, 1000)
+        return setTimeout(() => { this.findTracksCount(callback) }, 1000)
 
-      isSearchingAllTracks = false
-      props.tracksCount = result.count
-      props.shuffle()
+      delete this.isSearchingAllTracks;
+      this.tracksCount = result.count;
+      this.onTracksCountFound(this, this.tracksCount);
 
       if (callback)
         callback()
     })
   }
 
-  props.shuffle = function () {
-    for (var i = 0; i < props.tracksCount; i++)
-      trackIndexesToAsk[i] = i
-    trackIndexesToAsk = shuffle(trackIndexesToAsk)
+
+  shuffle(callback) {
+    if (!this.hasOwnProperty('tracksCount'))
+      return this.findTracksCount(this.getNextTrack.bind(this));
+
+    var indexesToSearch = [];
+    for (var i = 0; i < this.tracksCount; i++)
+      indexesToSearch.push(i);
+
+    this.indexesToSearch = shuffle(indexesToSearch);
+    callback();
   }
 
-  props.getNextTrack = function (callback) {
-    if (!('tracksCount' in props)) {
-      return props.findAllTracks(function () {
-        props.getNextTrack(callback)
-      })
+
+  getNextTrack() {
+    if (!this.hasOwnProperty('tracksCount'))
+      return this.findTracksCount(this.getNextTrack.bind(this));
+
+    if (this.tracksCount === 0)
+      return;
+
+    if (!this.indexesToSearch)
+      return this.shuffle(this.getNextTrack.bind(this));
+
+    if (!this.indexesToSearch.length) {
+      this.indexesToSearch = shuffle(this.prevIndexes);
+      this.prevIndexes = [];
     }
 
-    if (props.tracksCount === 0) {
-      return setTimeout(function () { callback(null); });
-    }
-
-    if (!trackIndexesToAsk.length && !prevTracks.length) {
-      // artist is taken from localStorage and still has to be intialized
-      props.shuffle();
-    }
-
-    // get next track from the queue
-    var nextTrack = nextTracks.shift()
-    if (nextTrack) {
-      prevTracks.push(nextTrack)
-      return callback(nextTrack)
-    }
-    
-    // no track in the queue, asking a new one
-    var trackIndex = trackIndexesToAsk.shift()
-    if (!isNaN(trackIndex)) {
-      return askTrack(trackIndex, function () {
-        props.getNextTrack(callback)
-      })
-    }
-
-    // no other track to ask, repeat the playlist
-    var prevTrack = prevTracks.shift()
-    nextTracks.push(prevTrack)
-    props.getNextTrack(callback)
+    var index = this.indexesToSearch.shift();
+    this.prevIndexes.push(index);
+    this.askTrack(index);
   }
 
-  function askTrack (offset, callback) {
-    mb.searchRecordings('arid:' + props.id, { limit: 1, offset: offset }, function (err, result) {
+
+  askTrack(offset) {
+    if (!this.foundTracks[offset])
+      return this.askTracksPage(offset, this.askTracksPage.bind(this, offset));
+
+    var track = this.foundTracks[offset];
+    if (!track.sources) {
+
+      track.searchSources(err => {
+        if (err)
+          return this.getNextTrack();
+
+        this.askTrack(offset);
+      })
+
+    } else if (track.sources.length === 0) {
+      this.getNextTrack();
+    } else {
+      this.onTrackFound(this, track);
+    }
+  }
+
+
+  askTracksPage(offset, callback) {
+    if (this.isAskingTrack)
+      return;
+
+    this.isAskingTrack = true;
+    var pageSize = 50;
+    var page = Math.floor(offset / pageSize);
+    var startOffset = page * pageSize;
+
+    MusicBrainz.searchRecordings('arid:' + this.id, { limit: pageSize, offset: page * pageSize }, (err, result) => {
+      this.isAskingTrack = false;
+
+      // retry to ask if it fails
       if (err || !result || !result.recordings) {
-        return setTimeout(function () {
-          props.askTrack(offset, callback)
+        return setTimeout(() => {
+          this.askTrack(offset)
         }, 1000)
       }
 
-    
-      var track = result.recordings[0]
-      if (props.foundTitles[track.title]) {
-        return callback(track)
-      }
 
-      props.foundTitles[track.title] = track
-      track.artistId = props.id
-      track.artistName = props.name
-      track = recording(track)
-      nextTracks.push(track)
-      callback(track)
-    })
+      result.recordings
+        .map(t => new Recording(t))
+        .forEach((track, i) => {
+          track.artistId = this.id;
+          track.artistName = this.name;
+          this.foundTracks[i + startOffset] = track
+        });
+
+
+      this.askTrack(offset);
+    });
   }
 
-  return props
+
+  serialize() {
+    return {
+      id: this.id,
+      name: this.name,
+      disambiguation: this.disambiguation
+    };
+  }
+
 }
+
+
+Artist.search = function (query, callback) {
+  MusicBrainz.searchArtists(query, function (err, result) {
+    if (result && result.artists)
+      result.artists = result.artists.map(artist => new Artist(artist));
+
+    callback(err, result);
+  })
+}
+
+
+export default Artist;
