@@ -19,7 +19,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "for-gh-pages": "(if exist docs rmdir docs /s /q) && move build docs",
-    "preversion": "npm run build && npm run for-gh-pages",
+    "preversion": "npm run build && npm run for-gh-pages && git add --all * && git commit",
     "postversion": "git push origin master && git push --tags origin master",
     "serve-production": "xcopy build playlister /e /i /h /r /y && http-server . -p 9000 -o \"http://localhost:9000/playlister\"",
     "test-build": "npm run build && npm run serve-production"
