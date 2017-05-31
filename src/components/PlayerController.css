@@ -12,6 +12,7 @@
 .player-controller-duration {
   padding: 5px;
   color: #999;
+  white-space: nowrap;
 }
 
 .player-seekbar {

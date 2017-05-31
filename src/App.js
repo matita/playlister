@@ -256,14 +256,6 @@ class App extends Component {
         </div>
 
         <main>
-          <div className="artists-container">
-            <Artists 
-              artists={this.state.artists}
-              onArtistSearched={this.handleArtistSearched.bind(this)}
-              onArtistRemoved={this.handleArtistRemoved.bind(this)}
-              onArtistMore={this.handleArtistMore.bind(this)} />
-          </div>
-
           <div className="player-container">
             <ol className="tracks">
               {tracks}
@@ -277,6 +269,14 @@ class App extends Component {
               onPlayClick={this.play.bind(this)}
               onPauseClick={this.pause.bind(this)}
               onVolumeChange={this.handleVolumeChange.bind(this)} />
+          </div>
+
+          <div className="artists-container">
+            <Artists 
+              artists={this.state.artists}
+              onArtistSearched={this.handleArtistSearched.bind(this)}
+              onArtistRemoved={this.handleArtistRemoved.bind(this)}
+              onArtistMore={this.handleArtistMore.bind(this)} />
           </div>
         </main>
       </div>

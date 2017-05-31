@@ -54,3 +54,39 @@ main {
   overflow: hidden;
   flex: 0;
 }
+
+
+@media (max-width: 600px) {
+
+  main {
+    flex-direction: column;
+  }
+
+  .artists-container {
+    width: auto;
+  }
+
+  .player-controller {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .player-controller-time,
+  .player-seekbar {
+    order: 1;
+    flex: 1;
+  }
+
+  .player-controller button {
+    flex-grow: 1;
+    order: 2;
+  }
+
+  .player-volume-icon,
+  .player-volume-bar {
+    display: none;
+  }
+
+
+
+}
