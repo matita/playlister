@@ -68,6 +68,8 @@ class Player extends Component {
           onError={this.props.onNextTrack}
           onProgress={this.handleProgress.bind(this)}
           onDuration={this.handleDurationChange.bind(this)}
+          onPlay={this.handlePlayClick.bind(this)}
+          onPause={this.handlePauseClick.bind(this)}
           width="100%"
           height="100%" />
         
