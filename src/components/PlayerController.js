@@ -39,6 +39,17 @@ class PlayerController extends Component {
   }
 
 
+  handleVolumeChange(e) {
+    var vol = +e.target.value;
+    this.props.onVolumeChange(vol);
+  }
+
+
+  handleVolumeClick(e) {
+    e.target.blur();
+  }
+
+
   render() {
     var playBtn = this.props.playing ?
       <button className="pause-btn fa fa-pause" onClick={this.handlePauseClick.bind(this)}></button> :
@@ -59,7 +70,8 @@ class PlayerController extends Component {
         <span className="player-volume-icon fa fa-volume-down"></span>
         <input className="player-volume-bar" type="range" min={0} max={1} step={0.01} 
           value={this.props.volume} 
-          onChange={this.props.onVolumeChange} />
+          onClick={this.handleVolumeClick.bind(this)}
+          onChange={this.handleVolumeChange.bind(this)} />
 
       </div>
     );

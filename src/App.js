@@ -17,12 +17,62 @@ class App extends Component {
       artists: [],
       prevTracks: [],
       nextTracks: [],
-      currentTrack: null
+      volume: (localStorage['playlister_volume'] && JSON.parse(localStorage['playlister_volume'])) || 0.2,
+      currentTrack: null,
+      playing: false
     }
 
     this.loadArtists();
     if (this.state.artists.length)
       this.findNextTrack();
+  }
+
+
+  componentDidMount() {
+    window.onkeydown = this.onKeyDown.bind(this);
+  }
+
+
+  onKeyDown(e) {
+    const excludedTags = ['INPUT', 'SELECT', 'TEXTAREA'];
+    if (excludedTags.indexOf(e.target.tagName) !== -1)
+      return;
+
+    const Keys = {
+      LEFT: 37,
+      UP: 38,
+      RIGHT: 39,
+      DOWN: 40,
+      SPACE: 32,
+      J: 74,
+      K: 75,
+      N: 78,
+      P: 80
+    };
+
+    switch (e.keyCode) {
+      case Keys.P:
+      case Keys.K:
+        this.playPrev(); 
+        break;
+      
+      case Keys.N: 
+      case Keys.J:
+        this.playNext(); 
+        break;
+
+      case Keys.SPACE: 
+        this.togglePlay(); 
+        break;
+
+      case Keys.UP:
+        this.volumeUp();
+        break;
+
+      case Keys.DOWN:
+        this.volumeDown();
+        break;
+    }
   }
 
 
@@ -67,6 +117,21 @@ class App extends Component {
   }
 
 
+  togglePlay() {
+    this.setState({ playing: !this.state.playing });
+  }
+
+
+  play() {
+    this.setState({ playing: true });
+  }
+
+
+  pause() {
+    this.setState({ playing: false });
+  }
+
+
   playNext() {
     if (this.state.currentTrack)
       this.state.prevTracks.push(this.state.currentTrack);
@@ -85,6 +150,16 @@ class App extends Component {
       this.state.nextTracks.unshift(this.state.currentTrack);
       this.setState({ currentTrack: prevTrack });
     }
+  }
+
+
+  volumeUp() {
+    this.handleVolumeChange(this.state.volume + 0.1);
+  }
+
+
+  volumeDown() {
+    this.handleVolumeChange(this.state.volume - 0.1);
   }
 
 
@@ -151,6 +226,16 @@ class App extends Component {
   }
 
 
+  handleVolumeChange(volume) {
+    volume = Math.max(0, Math.min(volume, 1));
+    if (volume === this.state.volume)
+      return;
+
+    localStorage['playlister_volume'] = JSON.stringify(volume);
+    this.setState({ volume: volume });
+  }
+
+
   render() {
     var classNames = ['App'];
     if (!this.state.artists.length)
@@ -184,9 +269,14 @@ class App extends Component {
               {tracks}
             </ol>
             <Player track={this.state.currentTrack}
+              playing={this.state.playing}
+              volume={this.state.volume}
               nextTracks={this.state.nextTracks}
               onNextTrack={this.playNext.bind(this)}
-              onPrevTrack={this.playPrev.bind(this)} />
+              onPrevTrack={this.playPrev.bind(this)}
+              onPlayClick={this.play.bind(this)}
+              onPauseClick={this.pause.bind(this)}
+              onVolumeChange={this.handleVolumeChange.bind(this)} />
           </div>
         </main>
       </div>

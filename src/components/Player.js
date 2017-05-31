@@ -10,8 +10,6 @@ class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playing: false,
-      volume: (localStorage['playlister_volume'] && JSON.parse(localStorage['playlister_volume'])) || 0.2,
       duration: 0,
       currentTime: 0
     };
@@ -19,12 +17,12 @@ class Player extends Component {
 
 
   handlePlayClick() {
-    this.setState({ playing: true });
+    this.props.onPlayClick();
   }
 
 
   handlePauseClick() {
-    this.setState({ playing: false });
+    this.props.onPauseClick();
   }
 
 
@@ -33,13 +31,6 @@ class Player extends Component {
       this.refs.player.seekTo(0);
     else
       this.props.onPrevTrack();
-  }
-
-
-  handleVolumeChange(e) {
-    var volume = +e.target.value;
-    localStorage['playlister_volume'] = JSON.stringify(volume);
-    this.setState({ volume: volume });
   }
 
 
@@ -71,8 +62,8 @@ class Player extends Component {
         <ReactPlayer className="player-video" 
           ref="player"
           url={trackUrl}
-          volume={this.state.volume}
-          playing={this.state.playing}
+          volume={this.props.volume}
+          playing={this.props.playing}
           onEnded={this.props.onNextTrack}
           onError={this.props.onNextTrack}
           onProgress={this.handleProgress.bind(this)}
@@ -84,15 +75,15 @@ class Player extends Component {
         <div className="player-next-track">Next: {nextTrack ? nextTrack.sources[0].title : '---'}</div>
         
         <PlayerController 
-          playing={this.state.playing}
-          volume={this.state.volume}
+          playing={this.props.playing}
+          volume={this.props.volume}
           currentTime={this.state.currentTime}
           duration={this.state.duration}
           onPlayClick={this.handlePlayClick.bind(this)}
           onPauseClick={this.handlePauseClick.bind(this)}
           onPrevClick={this.handlePrevClick.bind(this)}
           onNextClick={this.props.onNextTrack}
-          onVolumeChange={this.handleVolumeChange.bind(this)}
+          onVolumeChange={this.props.onVolumeChange}
           onTimeChange={this.handleSeek.bind(this)} />
       </div>
     );
