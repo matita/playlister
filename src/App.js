@@ -4,7 +4,6 @@ import './App.css';
 import Artists from './components/Artists';
 import Player from './components/Player';
 import Artist from './models/Artist';
-import SWNotifier from './components/SWNotifier';
 
 class App extends Component {
 
@@ -189,8 +188,6 @@ class App extends Component {
               onNextTrack={this.playNext.bind(this)}
               onPrevTrack={this.playPrev.bind(this)} />
           </div>
-
-          <SWNotifier />
         </main>
       </div>
     );
