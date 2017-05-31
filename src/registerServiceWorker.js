@@ -12,9 +12,11 @@ export default function register() {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      console.log('registering service worker', swUrl);
       navigator.serviceWorker
         .register(swUrl)
         .then(registration => {
+          console.log('sw registered');
           registration.onupdatefound = () => {
             const installingWorker = registration.installing;
             installingWorker.onstatechange = () => {
@@ -25,15 +27,18 @@ export default function register() {
                   // It's the perfect time to display a "New content is
                   // available; please refresh." message in your web app.
                   console.log('New content is available; please refresh.');
+                  document.title = 'refresh';
                 } else {
                   // At this point, everything has been precached.
                   // It's the perfect time to display a
                   // "Content is cached for offline use." message.
                   console.log('Content is cached for offline use.');
+                  document.title = 'offline';
                 }
               }
             };
           };
+          console.log('service worker registered');
         })
         .catch(error => {
           console.error('Error during service worker registration:', error);

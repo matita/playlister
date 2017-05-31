@@ -4,6 +4,7 @@ import './App.css';
 import Artists from './components/Artists';
 import Player from './components/Player';
 import Artist from './models/Artist';
+import SWNotifier from './components/SWNotifier';
 
 class App extends Component {
 
@@ -112,7 +113,6 @@ class App extends Component {
     } else
       this.state.nextTracks.push(track);
 
-    var newState = {};
     if (!this.state.currentTrack)
       this.playNext();
     else
@@ -166,9 +166,9 @@ class App extends Component {
     return (
       <div className={classNames.join(' ')}>
         <div className="header">
-          <span className="app-name">Playlister</span> by <a href="https://github.com/matita" target="_blank">matita</a>
+          <span className="app-name">Playlister</span> by <a href="https://github.com/matita" target="_blank" rel="noopener noreferrer">matita</a>
           {' '}&middot;{' '}
-          <a href="https://github.com/matita/playlister" target="_blank"><span className="fa fa-github"></span> source</a>
+          <a href="https://github.com/matita/playlister" target="_blank" rel="noopener noreferrer"><span className="fa fa-github"></span> source</a>
         </div>
 
         <main>
@@ -189,6 +189,8 @@ class App extends Component {
               onNextTrack={this.playNext.bind(this)}
               onPrevTrack={this.playPrev.bind(this)} />
           </div>
+
+          <SWNotifier />
         </main>
       </div>
     );

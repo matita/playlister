@@ -8,6 +8,7 @@
 
 # production
 /build
+/playlister
 
 # misc
 .DS_Store
