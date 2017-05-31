@@ -45,6 +45,11 @@ class PlayerController extends Component {
   }
 
 
+  handleSeekbarClick(e) {
+    e.target.blur();
+  }
+
+
   handleVolumeClick(e) {
     e.target.blur();
   }
@@ -64,7 +69,8 @@ class PlayerController extends Component {
 
         <input className="player-seekbar" type="range" min={0} max={this.props.duration} step={0.01}
           value={this.props.currentTime}
-          onChange={this.props.onTimeChange} />
+          onChange={this.props.onTimeChange}
+          onClick={this.handleSeekbarClick.bind(this)} />
         <span className="player-controller-time">{this.getCurrentTime()} / {this.getDuration()}</span>
 
         <span className="player-volume-icon fa fa-volume-down"></span>
