@@ -15,9 +15,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && xcopy build docs /e /h",
+    "build": "react-scripts build && npm run for-gh-pages",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "for-gh-pages": "(if exist docs rmdir docs /s /q) && move build docs",
     "preversion": "npm run build"
   }
 }
