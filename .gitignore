@@ -10,6 +10,9 @@
 /build
 /playlister
 
+# dev
+/.vscode
+
 # misc
 .DS_Store
 .env.local
