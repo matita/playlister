@@ -35,6 +35,12 @@
   padding: 5px 10px;
 }
 
+.artists-search-result-disambiguation {
+  margin-left: .2em;
+  color: #999;
+}
+
+.artists-search-result:hover,
 .artists-search-result-selected {
   background: #555;
   color: #ddd;

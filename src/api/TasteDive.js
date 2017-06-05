@@ -1,4 +1,3 @@
-import request from 'browser-request';
 import encodeParams from '../utils/encode-params';
 
 const BASE_URI = 'https://tastedive.com/api/similar';
@@ -10,7 +9,7 @@ class TasteDive {
         var callbackName = ('callback' + Math.random()).replace('.', '');
 
         var params = {
-            q: artistNames.map(n => 'band:' + n).join(', '),
+            q: artistNames.map(n => n).join(', '),
             type: 'music',
             k: API_KEY,
             callback: callbackName
@@ -21,6 +20,7 @@ class TasteDive {
 
         window[callbackName] = (results) => {
             delete window[callbackName];
+            callback(null, results);
         }
 
         var s = document.createElement('script');

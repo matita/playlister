@@ -1,0 +1,35 @@
+.artists-suggestions-open {
+    margin: .5em;
+    padding: .5em;
+    border: 1px solid #ddd;
+    border-radius: .5em;
+    font-size: .8em;
+    position: relative;
+}
+
+.artists-suggestions-open:before {
+    content: 'You may like ' attr(data-similar-count) ' artists';
+    display: block;
+    color: #999;
+    margin-left: .2em;
+}
+
+.similar-name {
+    display: inline-block;
+    border-radius: .2em;
+    border: 1px solid #ddd;
+    margin: .2em;
+    padding: .2em;
+    cursor: pointer;
+}
+
+.similar-name:hover {
+    background: #ddd;
+}
+
+.artists-suggestions-close {
+    position: absolute;
+    top: .5em;
+    right: .5em;
+    cursor: pointer;
+}
