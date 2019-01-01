@@ -15,7 +15,6 @@ class Player extends Component {
     };
   }
 
-
   handlePlayClick() {
     this.props.onPlayClick();
   }
@@ -66,6 +65,7 @@ class Player extends Component {
           playing={this.props.playing}
           onEnded={this.props.onNextTrack}
           onError={this.props.onNextTrack}
+          progressFrequency={100}
           onProgress={this.handleProgress.bind(this)}
           onDuration={this.handleDurationChange.bind(this)}
           onPlay={this.handlePlayClick.bind(this)}
@@ -73,10 +73,8 @@ class Player extends Component {
           width="100%"
           height="100%" />
         
-        <div className="player-track">{track ? track.sources[0].title : '---'}</div>
-        <div className="player-next-track">Next: {nextTrack ? nextTrack.sources[0].title : '---'}</div>
-        
         <PlayerController 
+          track={track}
           playing={this.props.playing}
           volume={this.props.volume}
           currentTime={this.state.currentTime}

@@ -1,11 +1,21 @@
 .player-controller {
-  padding: 20px;
   display: flex;
   align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 10;
+}
+
+.player-controller-buttons {
+  display: flex;
 }
 
 .player-controller button {
   color: #555;
+  padding: 0;
 }
 
 .player-controller-time,
@@ -39,4 +49,13 @@
 .player-volume-icon {
   padding-left: 1em;
   padding-right: .2em;
+}
+
+.player-track {
+  padding: 1em;
+  text-align: center;
+  flex: 1 1 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -237,13 +237,16 @@ class App extends Component {
 
 
   render() {
+    const { prevTracks, nextTracks, currentTrack, artists } = this.state;
+
     var classNames = ['App'];
-    if (!this.state.artists.length)
+    if (!artists.length)
       classNames.push('first-time');
 
-    var tracks = this.state.nextTracks.map((track, i) => {
+    var tracks = prevTracks.concat(currentTrack ? [currentTrack] : []).concat(nextTracks).map((track, i) => {
       return <li key={i}>
-        {track.artistName} - {track.title}
+        <span className="track-artist">{track.artistName}</span> - <span className="track-title">{track.title}</span>
+        <div className="track-source">{track.sources[0].title}</div>
       </li>;
     });
 
@@ -252,14 +255,11 @@ class App extends Component {
         <div className="header">
           <span className="app-name">Playlister</span> by <a href="https://github.com/matita" target="_blank" rel="noopener noreferrer">matita</a>
           {' '}&middot;{' '}
-          <a href="https://github.com/matita/playlister" target="_blank" rel="noopener noreferrer"><span className="fa fa-github"></span> source</a>
+          <a href="https://github.com/matita/playlister" target="_blank" rel="noopener noreferrer"><span className="fab fa-github"></span> source</a>
         </div>
 
         <main>
           <div className="player-container">
-            <ol className="tracks">
-              {tracks}
-            </ol>
             <Player track={this.state.currentTrack}
               playing={this.state.playing}
               volume={this.state.volume}
@@ -269,6 +269,10 @@ class App extends Component {
               onPlayClick={this.play.bind(this)}
               onPauseClick={this.pause.bind(this)}
               onVolumeChange={this.handleVolumeChange.bind(this)} />
+            
+            <ol className="tracks">
+              {tracks}
+            </ol>
           </div>
 
           <div className="artists-container">

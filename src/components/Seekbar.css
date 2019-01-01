@@ -1,0 +1,42 @@
+.seekbar {
+    height: 30px;
+    position: relative;
+}
+
+.seekbar-background {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #eee;
+    transition: .2s height;
+}
+
+.seekbar:hover .seekbar-background {
+    height: 10px;
+}
+
+.seekbar-value {
+    background: #555;
+    height: 100%;
+    position: relative;
+}
+
+.seekbar-value:after {
+    content: '';
+    display: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background: #555;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+}
+
+.seekbar.dragging .seekbar-value:after,
+.seekbar:hover .seekbar-value:after {
+    display: block;
+}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Seekbar from './Seekbar';
 import displayTime from '../utils/display-time';
 import './PlayerController.css';
 
@@ -56,24 +57,30 @@ class PlayerController extends Component {
 
 
   render() {
+    const { track } = this.props;
+
     var playBtn = this.props.playing ?
-      <button className="pause-btn fa fa-pause" onClick={this.handlePauseClick.bind(this)}></button> :
-      <button className="play-btn fa fa-play" onClick={this.handlePlayClick.bind(this)}></button>;
+      <button className="pause-btn fas fa-pause" onClick={this.handlePauseClick.bind(this)}></button> :
+      <button className="play-btn fas fa-play" onClick={this.handlePlayClick.bind(this)}></button>;
 
     return (
       <div className="player-controller">
+        <Seekbar value={this.props.currentTime} 
+          total={this.props.duration} 
+          style={{ position: 'absolute', bottom: '100%', left: 0, right: 0 }}
+          onChange={this.props.onTimeChange} />
         
-        <button className="prev-btn fa fa-step-backward" onClick={this.handlePrevClick.bind(this)}></button>
-        {playBtn}
-        <button className="next-btn fa fa-step-forward" onClick={this.handleNextClick.bind(this)}></button>
+        <div className="player-controller-buttons">
+          <button className="prev-btn fas fa-step-backward" onClick={this.handlePrevClick.bind(this)}></button>
+          {playBtn}
+          <button className="next-btn fas fa-step-forward" onClick={this.handleNextClick.bind(this)}></button>
+        </div>
 
-        <input className="player-seekbar" type="range" min={0} max={this.props.duration} step={0.01}
-          value={this.props.currentTime}
-          onChange={this.props.onTimeChange}
-          onClick={this.handleSeekbarClick.bind(this)} />
+        <div className="player-track">{track ? track.sources[0].title : '---'}</div>
+
         <span className="player-controller-time">{this.getCurrentTime()} / {this.getDuration()}</span>
 
-        <span className="player-volume-icon fa fa-volume-down"></span>
+        <span className="player-volume-icon fas fa-volume-down"></span>
         <input className="player-volume-bar" type="range" min={0} max={1} step={0.01} 
           value={this.props.volume} 
           onClick={this.handleVolumeClick.bind(this)}

@@ -1,6 +1,5 @@
 .App {
   display: flex;
-  height: 100%;
   flex-direction: column;
 }
 
@@ -27,22 +26,21 @@ a:hover {
 main {
   flex: 1;
   display:flex;
+  align-items: flex-start;
 }
 
 .artists-container {
-  width: 400px;
-  height: 100%;
-  flex: 2;
+  flex: 1;
   transition: flex .2s;
 }
 
 .player-container {
-  flex: 6;
+  flex: 1;
   transition: flex .2s;
 }
 
 .tracks {
-  display: none;
+  /*display: none;*/
 }
 
 
@@ -60,26 +58,11 @@ main {
 
   main {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .artists-container {
     width: auto;
-  }
-
-  .player-controller {
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .player-controller-time,
-  .player-seekbar {
-    order: 1;
-    flex: 1;
-  }
-
-  .player-controller button {
-    flex-grow: 1;
-    order: 2;
   }
 
   .player-volume-icon,
