@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "browser-request": "^0.3.3",
+    "gh-pages": "^2.0.1",
     "react-player": "^0.18.0",
     "react-scripts": "1.0.6",
     "youtube-search": "^1.0.9"
@@ -23,6 +24,8 @@
     "postversion": "git push origin master && git push --tags origin master",
     "commit-docs": "git add --all \"docs/*\" && git commit -m \"built for release\"",
     "serve-production": "xcopy build playlister /e /i /h /r /y && http-server . -p 9000 -o \"http://localhost:9000/playlister\"",
-    "test-build": "npm run build && npm run serve-production"
+    "test-build": "npm run build && npm run serve-production",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
