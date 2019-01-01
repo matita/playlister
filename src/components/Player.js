@@ -61,6 +61,7 @@ class Player extends Component {
         <ReactPlayer className="player-video" 
           ref="player"
           url={trackUrl}
+          youtubeConfig={{ playerVars: { playsinline: 1 } }}
           volume={this.props.volume}
           playing={this.props.playing}
           onEnded={this.props.onNextTrack}
