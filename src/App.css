@@ -39,10 +39,6 @@ main {
   transition: flex .2s;
 }
 
-.tracks {
-  /*display: none;*/
-}
-
 
 .first-time .artists-container {
   flex: 1;
