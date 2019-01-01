@@ -50,7 +50,7 @@ main {
 }
 
 
-@media (max-width: 600px) {
+@media screen and (orientation: portrait) {
 
   main {
     flex-direction: column;

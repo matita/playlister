@@ -4,6 +4,7 @@ import './App.css';
 import Artists from './components/Artists';
 import Player from './components/Player';
 import Artist from './models/Artist';
+import Tracks from './components/Tracks';
 
 class App extends Component {
 
@@ -243,13 +244,6 @@ class App extends Component {
     if (!artists.length)
       classNames.push('first-time');
 
-    var tracks = prevTracks.concat(currentTrack ? [currentTrack] : []).concat(nextTracks).map((track, i) => {
-      return <li key={i}>
-        <span className="track-artist">{track.artistName}</span> - <span className="track-title">{track.title}</span>
-        <div className="track-source">{track.sources[0].title}</div>
-      </li>;
-    });
-
     return (
       <div className={classNames.join(' ')}>
         <div className="header">
@@ -270,9 +264,7 @@ class App extends Component {
               onPauseClick={this.pause.bind(this)}
               onVolumeChange={this.handleVolumeChange.bind(this)} />
             
-            <ol className="tracks">
-              {tracks}
-            </ol>
+            <Tracks prevTracks={prevTracks} currentTrack={currentTrack} nextTracks={nextTracks} />
           </div>
 
           <div className="artists-container">

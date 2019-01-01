@@ -1,0 +1,30 @@
+.tracks-item {
+    position: relative;
+    padding-left: 1em;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    transition: .2s padding-left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tracks-item.playing {
+    padding-left: 2em;
+}
+
+.tracks-item-artist, 
+.tracks-item-title {
+    display: inline;
+}
+
+.tracks-item-title:before {
+    content: ' – ';
+}
+
+.tracks-item-source {
+    opacity: .4;
+    font-size: .8em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
