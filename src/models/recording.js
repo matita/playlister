@@ -10,10 +10,17 @@ class Recording {
 
   }
 
+  getSearchText(text) {
+    return text
+      .replace(/\W/g, ' ')
+      .replace(/\s+/g, ' ')
+      .toLowerCase();
+  }
+
 
   searchSources(callback) {
     if (!this.searchText)
-      this.searchText = (this.artistName + ' ' + this.title).toLowerCase();
+      this.searchText = this.getSearchText(this.artistName + ' ' + this.title);
     
     YouTube.search(this.searchText, (err, sources) => {
       if (err)
@@ -36,10 +43,13 @@ class Recording {
 
   matchAllWords(words) {
     return function (source) {
-      var sourceTitle = source.title.toLowerCase()
+      const sourceTitle = source.title.toLowerCase()
+      const sourceDescription = source.description.toLowerCase();
+      const sourceText = sourceTitle + ' ' + sourceDescription;
+
       for (var i = 0; i < words.length; i++) {
         var word = words[i];
-        if (sourceTitle.indexOf(word) === -1)
+        if (sourceText.indexOf(word) === -1)
           return false
       }
       return true
