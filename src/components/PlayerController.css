@@ -53,9 +53,26 @@
 
 .player-track {
   padding: 1em;
-  text-align: center;
+  text-align: left;
   flex: 1 1 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: .8em;
+}
+
+.player-track-title:before {
+  content: ' - ';
+}
+
+.player-track-source {
+  font-size: .8em;
+  opacity: .5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-track-source:before {
+  content: '\f167 ';
+  font-family: "Font Awesome 5 Brands";
 }

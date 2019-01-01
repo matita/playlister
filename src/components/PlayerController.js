@@ -55,6 +55,19 @@ class PlayerController extends Component {
     e.target.blur();
   }
 
+  renderCurrentTrack(track) {
+    if (!track)
+      return <div className="player-track">---</div>;
+
+    return (
+      <div className="player-track">
+        <span className="player-track-artist">{track.artistName}</span>
+        <span className="player-track-title">{track.title}</span>
+        <div className="player-track-source">{track.sources[0].title}</div>
+      </div>
+    );
+  }
+
 
   render() {
     const { track } = this.props;
@@ -76,7 +89,7 @@ class PlayerController extends Component {
           <button className="next-btn fas fa-step-forward" onClick={this.handleNextClick.bind(this)}></button>
         </div>
 
-        <div className="player-track">{track ? track.sources[0].title : '---'}</div>
+        {this.renderCurrentTrack(track)}
 
         <span className="player-controller-time">{this.getCurrentTime()} / {this.getDuration()}</span>
 
