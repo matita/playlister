@@ -27,7 +27,9 @@ class Recording {
         return callback(err);
 
       var words = this.searchText.toLowerCase().split(/\W+/g);
-      this.sources = sources.filter(this.matchAllWords(words));
+      this.sources = sources
+        .filter(this.matchAllWords(words))
+        .filter(this.isDurationAcceptable, this);
       this.sources.forEach(s => this.applyScore(s));
       this.sources.sort((s1, s2) => s2.score - s1.score);
       callback(null, this.sources);
@@ -54,6 +56,11 @@ class Recording {
       }
       return true
     }
+  }
+
+  isDurationAcceptable(source) {
+    const videoDuration = source.duration * 1000;
+    return videoDuration >= this.length * 0.75 && videoDuration < this.length * 1.5;
   }
 
 
