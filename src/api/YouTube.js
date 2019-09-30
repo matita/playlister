@@ -2,7 +2,7 @@ import search from 'youtube-search';
 import request from 'browser-request';
 import durationToSeconds from '../utils/iso8601-seconds';
 
-const YT_KEY = 'AIzaSyDyZVX8On7QglmGjrarAAsr8aLnoWp9Lck';
+const YT_KEY = 'AIzaSyCiJGf_YPn371T21HpTsXtLl6_hFfyQV7w'; // 'AIzaSyDyZVX8On7QglmGjrarAAsr8aLnoWp9Lck';
 const BASE_URL = 'https://www.googleapis.com/youtube/v3/videos'
 
 class YouTube {
