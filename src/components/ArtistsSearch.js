@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
-import Artist from '../models/Artist';
+import Artist from '../models/artist';
 import './ArtistsSearch.css';
 
 

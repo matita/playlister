@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash';
 import MusicBrainz from '../api/MusicBrainz';
-import Recording from './Recording';
+import Recording from './recording';
 
 
 class Artist {

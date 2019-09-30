@@ -3,7 +3,7 @@ import './App.css';
 
 import Artists from './components/Artists';
 import Player from './components/Player';
-import Artist from './models/Artist';
+import Artist from './models/artist';
 import Tracks from './components/Tracks';
 
 class App extends Component {
